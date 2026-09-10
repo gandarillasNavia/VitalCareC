@@ -43,3 +43,9 @@ wwwroot/lib/
 
 # Local analysis artifacts
 _zip_analysis/
+
+# Archivos y carpetas temporales de SonarQube
+.sonarqube/
+**/.sonarqube/
+init_scan.bat
+sonnar-project.properties
