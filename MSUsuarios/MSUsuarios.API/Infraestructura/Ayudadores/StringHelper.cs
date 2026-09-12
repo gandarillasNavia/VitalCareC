@@ -73,28 +73,18 @@ namespace MSUsuarios.Infraestructura.Ayudadores
                 return true;
 
             int palabrasDeUnCaracter = partes.Count(p => p.Length == 1 && !EsConectorValido(p));
-            int palabrasCortasNoValidas = partes.Count(p => p.Length <= 2 && !EsConectorValido(p));
-
             if (palabrasDeUnCaracter >= 2)
                 return true;
 
             if (partes.Length == 2)
-            {
-                bool primeraEsCortaInvalida = partes[0].Length <= 2 && !EsConectorValido(partes[0]);
-                bool segundaEsCortaInvalida = partes[1].Length <= 2 && !EsConectorValido(partes[1]);
+                return EsDosPartesFragmentado(partes);
 
-                if ((partes[0].Length >= 3 && segundaEsCortaInvalida) ||
-                    (primeraEsCortaInvalida && partes[1].Length >= 3))
-                    return true;
-            }
-
-            if (partes.Length >= 3 && palabrasCortasNoValidas >= 2)
-                return true;
+            int palabrasCortasNoValidas = partes.Count(EsCortaInvalida);
 
             if (partes.Length >= 4 && palabrasCortasNoValidas >= 3)
                 return true;
 
-            return false;
+            return partes.Length >= 3 && palabrasCortasNoValidas >= 2;
         }
 
         public static bool ApellidoPareceFragmentado(string? apellido)
@@ -145,6 +135,20 @@ namespace MSUsuarios.Infraestructura.Ayudadores
         private static bool EsConectorValido(string texto)
         {
             return ConectoresValidosNombre.Contains(texto);
+        }
+
+        private static bool EsCortaInvalida(string palabra)
+        {
+            return palabra.Length <= 2 && !EsConectorValido(palabra);
+        }
+
+        private static bool EsDosPartesFragmentado(string[] partes)
+        {
+            bool primeraEsCortaInvalida = EsCortaInvalida(partes[0]);
+            bool segundaEsCortaInvalida = EsCortaInvalida(partes[1]);
+
+            return (partes[0].Length >= 3 && segundaEsCortaInvalida) ||
+                (primeraEsCortaInvalida && partes[1].Length >= 3);
         }
     }
 }
