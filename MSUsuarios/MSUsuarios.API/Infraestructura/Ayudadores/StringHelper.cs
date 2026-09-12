@@ -96,37 +96,14 @@ namespace MSUsuarios.Infraestructura.Ayudadores
 
             string[] partes = apellido.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            if (partes.Length == 0)
-                return true;
-
-            if (partes.Any(p => p.Length == 1))
+            if (partes.Length == 0 || partes.Any(p => p.Length == 1))
                 return true;
 
             if (partes.Length == 2)
-            {
-                bool primeraEsConector = EsConectorValido(partes[0]);
-                bool segundaEsConector = EsConectorValido(partes[1]);
+                return EsDosPartesApellidoFragmentado(partes);
 
-                if (!primeraEsConector && !segundaEsConector)
-                {
-                    if ((partes[0].Length >= 3 && partes[1].Length <= 2) ||
-                        (partes[0].Length <= 2 && partes[1].Length >= 3))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            if (partes.Length >= 3)
-            {
-                int cortasNoValidas = partes.Count(p => p.Length <= 2 && !EsConectorValido(p));
-                if (cortasNoValidas >= 1)
-                    return true;
-            }
-
-            return false;
+            return partes.Length >= 3 && partes.Any(EsCortaInvalida);
         }
-
         private static readonly HashSet<string> ConectoresValidosNombre = new(StringComparer.OrdinalIgnoreCase)
         {
             "de", "del", "la", "las", "los", "san", "santa", "van", "von", "da", "das", "do", "dos"
@@ -149,6 +126,15 @@ namespace MSUsuarios.Infraestructura.Ayudadores
 
             return (partes[0].Length >= 3 && segundaEsCortaInvalida) ||
                 (primeraEsCortaInvalida && partes[1].Length >= 3);
+        }
+
+        private static bool EsDosPartesApellidoFragmentado(string[] partes)
+        {
+            if (EsConectorValido(partes[0]) || EsConectorValido(partes[1]))
+                return false;
+
+            return (partes[0].Length >= 3 && partes[1].Length <= 2) ||
+                (partes[0].Length <= 2 && partes[1].Length >= 3);
         }
     }
 }
