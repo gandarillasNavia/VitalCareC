@@ -3,6 +3,7 @@ using MSUsuarios.Dominio.Puertos.PuertoSalida;
 using MSUsuarios.Infraestructura.Ayudadores;
 using MSUsuarios.Infraestructura.Persistencia.Conexion;
 using Npgsql;
+using System.Text;
 
 namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 {
@@ -124,35 +125,34 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
         {
             return GetAll(string.Empty);
         }
-
         public IEnumerable<Usuario> GetAll(string filtro)
         {
             List<Usuario> usuarios = new List<Usuario>();
 
-            using var conn = new NpgsqlConnection(_connectionString);
-            using var cmd = new NpgsqlCommand();
-
-            string query = $@"
-                SELECT {ColumnasSeleccionUsuario}
+            const string sql = @"
+                SELECT id_usuario, nombres, primer_apellido, segundo_apellido, ci, ci_extension, 
+                    telefono, activo, email, user_name, role, must_change_password
                 FROM usuario
-                WHERE activo = TRUE";
+                WHERE activo = TRUE
+                AND (@filtroPattern IS NULL OR (
+                        nombres ILIKE @filtroPattern OR
+                        primer_apellido ILIKE @filtroPattern OR
+                        segundo_apellido ILIKE @filtroPattern OR
+                        ci ILIKE @filtroPattern OR
+                        telefono ILIKE @filtroPattern OR
+                        ci_extension ILIKE @filtroPattern OR
+                        email ILIKE @filtroPattern OR
+                        user_name ILIKE @filtroPattern OR
+                        role ILIKE @filtroPattern
+                ))
+                ORDER BY nombres, primer_apellido, segundo_apellido";
 
-            string where = FiltroSqlHelper.ConstruirCondicionLike(
-                filtro,
-                "nombres",
-                "primer_apellido",
-                "segundo_apellido",
-                "ci",
-                "telefono",
-                "ci_extension",
-                "email",
-                "user_name",
-                "role"
-            );
+            using var conn = new NpgsqlConnection(_connectionString);
+            using var cmd = new NpgsqlCommand(sql, conn);
 
-            cmd.CommandText = query + where + " ORDER BY nombres, primer_apellido, segundo_apellido";
-            cmd.Connection = conn;
-            FiltroSqlHelper.AgregarParametrosLike(cmd, filtro);
+            string? patrónFiltro = string.IsNullOrWhiteSpace(filtro) ? null : $"%{filtro.Trim()}%";
+            cmd.Parameters.AddWithValue("@filtroPattern", (object?)patrónFiltro ?? DBNull.Value);
+
             conn.Open();
 
             using var reader = cmd.ExecuteReader();
