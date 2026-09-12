@@ -15,7 +15,6 @@ namespace MSUsuarios.App.Servicios
         private readonly UsuarioValidacionGeneral _validacionGeneral;
         private readonly ValidadorContraseña _validadorContraseña;
         private readonly ValidadorCambioContraseña _validadorCambioContraseña;
-        private readonly ITokenService _tokenService;
         private readonly IEmailService _emailService;
         private readonly IUsuarioTokenService _usuarioTokenService;
         private readonly string _frontendBaseUrl;
@@ -25,7 +24,6 @@ namespace MSUsuarios.App.Servicios
             UsuarioValidacionGeneral validacionGeneral,
             ValidadorContraseña validadorContraseña,
             ValidadorCambioContraseña validadorCambioContraseña,
-            ITokenService tokenService,
             IEmailService emailService,
             IUsuarioTokenService usuarioTokenService,
             IConfiguration configuration)
@@ -34,7 +32,6 @@ namespace MSUsuarios.App.Servicios
             _validacionGeneral = validacionGeneral;
             _validadorContraseña = validadorContraseña;
             _validadorCambioContraseña = validadorCambioContraseña;
-            _tokenService = tokenService;
             _emailService = emailService;
             _usuarioTokenService = usuarioTokenService;
             _frontendBaseUrl = Environment.GetEnvironmentVariable("FRONTEND_BASE_URL")
