@@ -12,26 +12,20 @@ namespace MSUsuarios.App.Servicios
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _repository;
-        private readonly UsuarioValidacionGeneral _validacionGeneral;
-        private readonly ValidadorContraseña _validadorContraseña;
-        private readonly ValidadorCambioContraseña _validadorCambioContraseña;
+        private readonly UsuarioValidadores _validadores;        
         private readonly IEmailService _emailService;
         private readonly IUsuarioTokenService _usuarioTokenService;
         private readonly string _frontendBaseUrl;
 
         public UsuarioService(
             IUsuarioRepository repository,
-            UsuarioValidacionGeneral validacionGeneral,
-            ValidadorContraseña validadorContraseña,
-            ValidadorCambioContraseña validadorCambioContraseña,
+            UsuarioValidadores validadores,
             IEmailService emailService,
             IUsuarioTokenService usuarioTokenService,
             IConfiguration configuration)
         {
             _repository = repository;
-            _validacionGeneral = validacionGeneral;
-            _validadorContraseña = validadorContraseña;
-            _validadorCambioContraseña = validadorCambioContraseña;
+            _validadores = validadores;
             _emailService = emailService;
             _usuarioTokenService = usuarioTokenService;
             _frontendBaseUrl = Environment.GetEnvironmentVariable("FRONTEND_BASE_URL")
@@ -43,7 +37,7 @@ namespace MSUsuarios.App.Servicios
         {
             try
             {
-                Result validacion = _validacionGeneral.ValidarRegistro(dto);
+                Result validacion = _validadores.General.ValidarRegistro(dto);
                 if (!validacion.IsSuccess)
                     return validacion;
 
@@ -111,7 +105,7 @@ namespace MSUsuarios.App.Servicios
 
         public Result ActualizarUsuario(UsuarioActualizarDto dto, int? idUsuarioSesion)
         {
-            Result validacion = _validacionGeneral.ValidarActualizacion(dto);
+            Result validacion = _validadores.General.ValidarActualizacion(dto);
             if (!validacion.IsSuccess)
                 return validacion;
 
@@ -138,7 +132,7 @@ namespace MSUsuarios.App.Servicios
 
         public Result EliminarUsuario(int idUsuario, int? idUsuarioSesion)
         {
-            Result validacion = _validacionGeneral.ValidarEliminacion(idUsuario);
+            Result validacion = _validadores.General.ValidarEliminacion(idUsuario);
             if (!validacion.IsSuccess)
                 return validacion;
 
@@ -195,7 +189,7 @@ namespace MSUsuarios.App.Servicios
                 return Result.Fail("El usuario no existe.");
 
             // Validar el cambio de contraseña (verifica actual, complejidad, coincidencia, diferencia)
-            Result resultadoValidacion = _validadorCambioContraseña.Validar(passwordActual, nuevaPassword, nuevaPassword, usuario);
+            Result resultadoValidacion = _validadores.CambioContraseña.Validar(passwordActual, nuevaPassword, nuevaPassword, usuario);
             if (!resultadoValidacion.IsSuccess)
                 return resultadoValidacion;
 
@@ -233,7 +227,7 @@ namespace MSUsuarios.App.Servicios
                 return Result.Fail("El usuario no existe.");
 
             // Validar complejidad de contraseña
-            Result resultadoValidacion = _validadorContraseña.ValidarComplexidad(dto.NuevaPassword);
+Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.NuevaPassword);
             if (!resultadoValidacion.IsSuccess)
                 return resultadoValidacion;
 

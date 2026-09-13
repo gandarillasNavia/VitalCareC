@@ -100,6 +100,7 @@ builder.Services.AddScoped<IUsuarioTokenService, UsuarioTokenService>();
 builder.Services.AddScoped<UsuarioValidacionGeneral>();
 builder.Services.AddScoped<ValidadorContraseña>();
 builder.Services.AddScoped<ValidadorCambioContraseña>();
+builder.Services.AddScoped<UsuarioValidadores>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
