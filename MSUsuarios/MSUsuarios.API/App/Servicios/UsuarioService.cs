@@ -309,12 +309,6 @@ Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.Nue
             };
         }
 
-        private string ConstruirEnlaceFrontend(string rutaRelativa, string tokenPlano)
-        {
-            string tokenSeguro = Uri.EscapeDataString(tokenPlano);
-            return $"{_frontendBaseUrl}{rutaRelativa}?token={tokenSeguro}";
-        }
-
         private static string MapearViolacionUnica(string? constraintName)
         {
             return constraintName switch
