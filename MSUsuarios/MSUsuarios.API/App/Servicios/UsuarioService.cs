@@ -15,22 +15,17 @@ namespace MSUsuarios.App.Servicios
         private readonly UsuarioValidadores _validadores;        
         private readonly IEmailService _emailService;
         private readonly IUsuarioTokenService _usuarioTokenService;
-        private readonly string _frontendBaseUrl;
 
         public UsuarioService(
             IUsuarioRepository repository,
             UsuarioValidadores validadores,
             IEmailService emailService,
-            IUsuarioTokenService usuarioTokenService,
-            IConfiguration configuration)
+            IUsuarioTokenService usuarioTokenService)
         {
             _repository = repository;
             _validadores = validadores;
             _emailService = emailService;
             _usuarioTokenService = usuarioTokenService;
-            _frontendBaseUrl = Environment.GetEnvironmentVariable("FRONTEND_BASE_URL")
-                ?? configuration["Frontend:BaseUrl"]?.TrimEnd('/')
-                ?? "http://localhost:5081";
         }
 
         public Result CrearUsuario(UsuarioRegistroDto dto, string role, int? idUsuarioSesion)
