@@ -44,11 +44,12 @@ namespace MSUsuarios.Infraestructura.Persistencia.Conexion
 
         private static string ObtenerVariableObligatoria(string nombre)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(nombre);
             string? valor = Environment.GetEnvironmentVariable(nombre);
 
             if (string.IsNullOrWhiteSpace(valor))
             {
-                throw new Exception($"No se encontro la variable de entorno '{nombre}'.");
+                throw new InvalidOperationException($"No se encontro la variable de entorno '{nombre}'.");
             }
 
             return valor;
