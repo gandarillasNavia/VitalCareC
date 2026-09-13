@@ -1,8 +1,9 @@
+using System.Text.Json.Serialization;
 namespace MSUsuarios.App.DTOs
 {
     public class UsuarioActualizarDto
     {
-        public int IdUsuario { get; set; }
+        [JsonRequired] public int IdUsuario { get; set; }
         public string Email { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public byte Activo { get; set; } = 1;
