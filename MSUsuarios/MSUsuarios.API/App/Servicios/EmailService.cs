@@ -97,11 +97,14 @@ namespace MSUsuarios.App.Servicios
                 message.Body = cuerpoHtml;
                 message.IsBodyHtml = true;
 
-                using SmtpClient client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port);
-                client.Credentials = new NetworkCredential(
-                    _smtpSettings.RemitenteEmail,
-                    _smtpSettings.Password
-                );
+                using SmtpClient client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
+                {
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(
+                        _smtpSettings.RemitenteEmail,
+                        _smtpSettings.Password
+                    )
+                };
                 client.EnableSsl = _smtpSettings.UseSsl;
                 client.Timeout = 10000; // 10 segundos timeout
 
