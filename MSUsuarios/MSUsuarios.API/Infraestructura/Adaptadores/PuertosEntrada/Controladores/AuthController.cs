@@ -1,5 +1,3 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MSUsuarios.App.DTOs;
@@ -13,14 +11,10 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IUsuarioTokenService _usuarioTokenService;
 
-        public AuthController(
-            IAuthService authService,
-            IUsuarioTokenService usuarioTokenService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _usuarioTokenService = usuarioTokenService;
         }
 
         [HttpPost("login")]
@@ -34,24 +28,6 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 return Unauthorized(new { mensaje = resultado.Error });
 
             return Ok(respuesta);
-        }
-
-        [Authorize]
-        [HttpPost("logout")]
-        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
-        public IActionResult Logout()
-        {
-            string? idUsuarioValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(idUsuarioValue, out int idUsuario))
-                return Unauthorized(new { mensaje = "Token invalido." });
-
-            Result resultado = _usuarioTokenService.RevocarTokensActivos(idUsuario, "INICIO_SESION");
-            if (!resultado.IsSuccess)
-                return BadRequest(new { mensaje = resultado.Error });
-
-            return Ok(new { mensaje = "Sesión cerrada correctamente." });
         }
     }
 }
