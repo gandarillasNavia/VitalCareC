@@ -66,6 +66,7 @@ namespace MSProductos.Aplicacion.Helpers
 
             return Regex.Replace(texto.Trim(), @"\s+", "").ToUpper();
         }
+        
         public static bool NombrePareceFragmentado(string? nombres)
         {
             nombres = LimpiarTexto(nombres);
@@ -84,15 +85,8 @@ namespace MSProductos.Aplicacion.Helpers
             if (palabrasDeUnCaracter >= 2)
                 return true;
 
-            if (partes.Length == 2)
-            {
-                bool primeraEsCortaInvalida = partes[0].Length <= 2 && !EsConectorValido(partes[0]);
-                bool segundaEsCortaInvalida = partes[1].Length <= 2 && !EsConectorValido(partes[1]);
-
-                if ((partes[0].Length >= 3 && segundaEsCortaInvalida) ||
-                    (primeraEsCortaInvalida && partes[1].Length >= 3))
-                    return true;
-            }
+            if (NombreDosPartesEsInvalido(partes))
+                return true;
 
             if (partes.Length >= 3 && palabrasCortasNoValidas >= 2)
                 return true;
@@ -101,6 +95,29 @@ namespace MSProductos.Aplicacion.Helpers
                 return true;
 
             return false;
+        }
+
+        private static bool NombreDosPartesEsInvalido(string[] partes)
+        {
+            if (partes.Length != 2)
+                return false;
+
+            bool primeraEsCortaInvalida =
+                partes[0].Length <= 2 && !EsConectorValido(partes[0]);
+
+            bool segundaEsCortaInvalida =
+                partes[1].Length <= 2 && !EsConectorValido(partes[1]);
+
+            return (partes[0].Length >= 3 && segundaEsCortaInvalida) ||
+                (primeraEsCortaInvalida && partes[1].Length >= 3);
+        }
+
+        private static string LimpiarTexto(string? texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "";
+
+            return Regex.Replace(texto.Trim(), @"\s+", "").ToUpper();
         }
 
         public static bool ApellidoPareceFragmentado(string? apellido)
