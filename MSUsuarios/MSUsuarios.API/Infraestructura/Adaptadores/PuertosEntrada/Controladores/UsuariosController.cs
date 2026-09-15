@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using MSUsuarios.App.DTOs;
@@ -21,6 +22,7 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpGet("GetUsers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetAllUsers([FromQuery] string? filtro)
         {
             IEnumerable<UsuarioDto> usuarios = string.IsNullOrWhiteSpace(filtro)
@@ -32,24 +34,29 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpGet("getUser")]
-        public IActionResult GetOneUser([FromQuery]  string? email, [FromQuery] string? userName)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetOneUser([FromQuery] string? email, [FromQuery] string? userName)
         {
-            UsuarioDto? usuario = null; 
-            string email_name = email?.Trim() ?? string.Empty;
-            string userName_name = userName?.Trim() ?? string.Empty;
-            if (string.IsNullOrWhiteSpace(email_name) && string.IsNullOrWhiteSpace(userName_name))
+            string emailName = email?.Trim() ?? string.Empty;
+            string userNameName = userName?.Trim() ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(emailName) && string.IsNullOrWhiteSpace(userNameName))
                 return BadRequest(new { mensaje = "Debe proporcionar un email o un userName." });
 
-            usuario = !string.IsNullOrWhiteSpace(email_name)
-            ?_usuarioService.ObtenerUsuarioPorEmail(email_name)
-            : _usuarioService.ObtenerUsuarioPorUserName(userName_name);
-            return usuario == null?
-            BadRequest(new { mensaje = "Usuario no encontrado." ,StatusCode = 404}):
-            Ok(new { mensaje = "Usuario obtenido correctamente.", data = usuario });
+            UsuarioDto? usuario = !string.IsNullOrWhiteSpace(emailName)
+                ? _usuarioService.ObtenerUsuarioPorEmail(emailName)
+                : _usuarioService.ObtenerUsuarioPorUserName(userNameName);
+
+            return usuario == null
+                ? BadRequest(new { mensaje = "Usuario no encontrado.", StatusCode = 404 })
+                : Ok(new { mensaje = "Usuario obtenido correctamente.", data = usuario });
         }
 
         [HttpGet("getUserById")]
         [Authorize(Roles = "Admin,Bioquimico")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetUserById([FromQuery] string id)
         {
             if (!int.TryParse(id, out int idUsuario))
@@ -62,9 +69,11 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 : Ok(new { mensaje = "Usuario obtenido correctamente.", data = usuario });
         }
 
-
         [Authorize(Roles = "Admin")]
         [HttpPost("CrearUsuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult CrearUsuario([FromBody] UsuarioRegistroDto dto)
         {
             dto.UserName = CredencialesHelper.GenerarUserName(
@@ -86,12 +95,16 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
             return Ok(new
             {
-                mensaje = "Usuario registrado correctamente. Revisa tu correo electronico para activar la cuenta.", StatusCode = 201
+                mensaje = "Usuario registrado correctamente. Revisa tu correo electronico para activar la cuenta.",
+                StatusCode = 201
             });
         }
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("EliminarUsuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult EliminarUsuario([FromQuery] string idUsuario, [FromQuery] string? idUsuarioSesion)
         {
             if (!int.TryParse(idUsuario, out int idUsuarioInt))
@@ -109,11 +122,13 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 return BadRequest(new { mensaje = resultado.Error, StatusCode = 400 });
 
             return Ok(new { mensaje = "Usuario eliminado correctamente.", StatusCode = 204 });
-
         }
+
         [Authorize(Roles = "Admin")]
-        
         [HttpPut("actualizarUsuario")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult ActualizarUsuario([FromBody] UsuarioActualizarDto dto, [FromQuery] string? idUsuarioSesion)
         {
             if (!TryResolverIdUsuarioSesion(idUsuarioSesion, out int? idUsuarioSesionInt, out string? errorSesion))
@@ -156,8 +171,5 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
             string? idUsuarioClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.TryParse(idUsuarioClaim, out int idSesion) ? idSesion : null;
         }
-
     }
-
 }
-
