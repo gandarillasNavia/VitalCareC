@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace MSProductos.Aplicacion.Helpers
 {
-    public static class StringHelper
+    public static partial class StringHelper
     {
         public static string Limpiar(string? texto)
         {
@@ -17,7 +17,7 @@ namespace MSProductos.Aplicacion.Helpers
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto.Trim(), @"\s+", " ");
+            return EspaciosRegex().Replace(texto.Trim(), " ");
         }
 
         public static string QuitarEspacios(string? texto)
@@ -25,7 +25,7 @@ namespace MSProductos.Aplicacion.Helpers
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto, @"\s+", "");
+            return EspaciosRegex().Replace(texto, "");
         }
 
         public static string LimpiarTexto(string? texto)
@@ -33,7 +33,7 @@ namespace MSProductos.Aplicacion.Helpers
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto.Trim(), @"\s+", " ");
+            return EspaciosRegex().Replace(texto.Trim(), " ");
         }
 
         public static string LimpiarTextoMayus(string? texto)
@@ -51,7 +51,7 @@ namespace MSProductos.Aplicacion.Helpers
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto, @"\D", "");
+            return NoNumerosRegex().Replace(texto, "");
         }
 
         public static string LimpiarCI(string? texto)
@@ -59,7 +59,9 @@ namespace MSProductos.Aplicacion.Helpers
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto.Trim(), @"\s+", "").ToUpper();
+            return EspaciosRegex()
+                .Replace(texto.Trim(), "")
+                .ToUpper();
         }
 
         public static bool NombrePareceFragmentado(string? nombres)
@@ -177,5 +179,11 @@ namespace MSProductos.Aplicacion.Helpers
         {
             return ConectoresValidosNombre.Contains(texto);
         }
+
+        [GeneratedRegex(@"\s+")]
+        private static partial Regex EspaciosRegex();
+
+        [GeneratedRegex(@"\D")]
+        private static partial Regex NoNumerosRegex();
     }
 }
