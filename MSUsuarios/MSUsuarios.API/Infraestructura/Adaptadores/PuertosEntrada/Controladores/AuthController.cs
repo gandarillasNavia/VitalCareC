@@ -24,8 +24,8 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(UsuarioLoginResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult Login([FromBody] UsuarioLoginRequestDto dto)
         {
             Result resultado = _authService.IniciarSesion(dto, out UsuarioLoginResponseDto? respuesta);
@@ -38,9 +38,9 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize]
         [HttpPost("logout")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult Logout()
         {
             string? idUsuarioValue = User.FindFirstValue(ClaimTypes.NameIdentifier);

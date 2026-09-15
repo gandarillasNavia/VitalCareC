@@ -19,8 +19,8 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpPost("registrar")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         public IActionResult Registrar([FromBody] UsuarioRegistroDto dto)
         {
             string role = "Bioquimico";
@@ -46,8 +46,8 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpPost("activar-cuenta")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         public IActionResult ActivarCuenta([FromBody] ActivarCuentaRequestDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Token))

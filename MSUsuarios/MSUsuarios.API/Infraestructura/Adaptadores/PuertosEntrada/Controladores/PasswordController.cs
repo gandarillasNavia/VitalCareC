@@ -20,9 +20,9 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize]
         [HttpPost("cambiar-contrasena")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult CambiarContrasena(
             [FromForm] string passwordActual,
             [FromForm] string nuevaPassword,

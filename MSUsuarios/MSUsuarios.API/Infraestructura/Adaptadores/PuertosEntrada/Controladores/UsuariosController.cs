@@ -22,7 +22,7 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpGet("GetUsers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult GetAllUsers([FromQuery] string? filtro)
         {
             IEnumerable<UsuarioDto> usuarios = string.IsNullOrWhiteSpace(filtro)
@@ -34,8 +34,8 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpGet("getUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         public IActionResult GetOneUser([FromQuery] string? email, [FromQuery] string? userName)
         {
             string emailName = email?.Trim() ?? string.Empty;
@@ -55,8 +55,8 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [HttpGet("getUserById")]
         [Authorize(Roles = "Admin,Bioquimico")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
         public IActionResult GetUserById([FromQuery] string id)
         {
             if (!int.TryParse(id, out int idUsuario))
@@ -71,9 +71,9 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpPost("CrearUsuario")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult CrearUsuario([FromBody] UsuarioRegistroDto dto)
         {
             dto.UserName = CredencialesHelper.GenerarUserName(
@@ -102,9 +102,9 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("EliminarUsuario")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult EliminarUsuario([FromQuery] string idUsuario, [FromQuery] string? idUsuarioSesion)
         {
             if (!int.TryParse(idUsuario, out int idUsuarioInt))
@@ -126,9 +126,9 @@ namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
         [Authorize(Roles = "Admin")]
         [HttpPut("actualizarUsuario")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
         public IActionResult ActualizarUsuario([FromBody] UsuarioActualizarDto dto, [FromQuery] string? idUsuarioSesion)
         {
             if (!TryResolverIdUsuarioSesion(idUsuarioSesion, out int? idUsuarioSesionInt, out string? errorSesion))
