@@ -31,11 +31,25 @@ namespace MSProductos.Dominio.Validadores
                 return Result.Fail("El nombre debe tener entre 3 y 45 caracteres.");
 
             string patron = @"^[\p{L}\s]+$";
-            if (!Regex.IsMatch(nombre, patron))
-                return Result.Fail("El nombre de la clasificación solo debe contener letras y espacios.");
 
-            if (Regex.IsMatch(nombre, @"^(.)\1+$"))
-                return Result.Fail("El nombre no puede estar compuesto por un único carácter repetido.");
+            if (!Regex.IsMatch(
+                    nombre,
+                    patron,
+                    RegexOptions.None,
+                    TimeSpan.FromMilliseconds(100)))
+            {
+                return Result.Fail(
+                    "El nombre de la clasificación solo debe contener letras y espacios.");
+            }
+            if (Regex.IsMatch(
+                    nombre,
+                    @"^(.)\1+$",
+                    RegexOptions.None,
+                    TimeSpan.FromMilliseconds(100)))
+            {
+                return Result.Fail(
+                    "El nombre no puede estar compuesto por un único carácter repetido.");
+            }
 
             return null;
         }

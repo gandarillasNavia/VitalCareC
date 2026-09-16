@@ -35,8 +35,16 @@ namespace MSProductos.Dominio.Validadores
                 return Result.Fail("El nombre debe tener entre 3 y 100 caracteres.");
 
             string patron = @"^[\p{L}0-9\s]+$";
-            if (!Regex.IsMatch(nombre, patron))
-                return Result.Fail("El nombre del medicamento no debe contener signos ni caracteres especiales.");
+
+            if (!Regex.IsMatch(
+                    nombre,
+                    patron,
+                    RegexOptions.None,
+                    TimeSpan.FromMilliseconds(100)))
+            {
+                return Result.Fail(
+                    "El nombre del medicamento no debe contener signos ni caracteres especiales.");
+            }
 
             return null;
         }
