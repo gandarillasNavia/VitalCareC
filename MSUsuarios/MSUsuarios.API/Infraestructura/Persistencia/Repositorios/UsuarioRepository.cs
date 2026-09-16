@@ -9,6 +9,9 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 {
     public class UsuarioRepository : IUsuarioRepository
     {
+        private const string ParamUserName = "user_name";
+        private const string ParamUltimaActualizacion = "ultima_actualizacion";
+        private const string ParamUsuarioAuditoriaId = "usuario_auditoria_id";
         private const string ColumnasSeleccionUsuario = @"
             id,
             nombres,
@@ -225,7 +228,7 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 
             using var conn = new NpgsqlConnection(_connectionString);
             using var cmd = new NpgsqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("user_name", userName.Trim());
+            cmd.Parameters.AddWithValue(ParamUserName, userName.Trim());
             conn.Open();
 
             using var reader = cmd.ExecuteReader();
@@ -262,7 +265,7 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 
             using var conn = new NpgsqlConnection(_connectionString);
             using var cmd = new NpgsqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("user_name", userName.Trim());
+            cmd.Parameters.AddWithValue(ParamUserName, userName.Trim());
             conn.Open();
 
             return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
@@ -283,8 +286,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
             cmd.Parameters.AddWithValue("id", idUsuario);
             cmd.Parameters.AddWithValue("password_hash", nuevoPasswordHash);
             cmd.Parameters.AddWithValue("must_change_password", mustChangePassword);
-            cmd.Parameters.AddWithValue("ultima_actualizacion", DateTime.UtcNow);
-            cmd.Parameters.AddWithValue("usuario_auditoria_id", idUsuarioAuditoria);
+            cmd.Parameters.AddWithValue(ParamUltimaActualizacion, DateTime.UtcNow);
+            cmd.Parameters.AddWithValue(ParamUsuarioAuditoriaId, idUsuarioAuditoria);
             conn.Open();
 
             return cmd.ExecuteNonQuery();
@@ -318,8 +321,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
             using var conn = new NpgsqlConnection(_connectionString);
             using var cmd = new NpgsqlCommand(query, conn);
             cmd.Parameters.AddWithValue("id", usuario.IdUsuario);
-            cmd.Parameters.AddWithValue("ultima_actualizacion", DateTime.UtcNow);
-            AgregarParametroNullable(cmd, "usuario_auditoria_id", idUsuarioSesion);
+            cmd.Parameters.AddWithValue(ParamUltimaActualizacion, DateTime.UtcNow);
+            AgregarParametroNullable(cmd, ParamUsuarioAuditoriaId, idUsuarioSesion);
             conn.Open();
 
             return cmd.ExecuteNonQuery();
@@ -334,13 +337,13 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
             cmd.Parameters.AddWithValue("ci_extension", usuario.CiExtencion.Trim().ToUpperInvariant());
             cmd.Parameters.AddWithValue("telefono", usuario.Telefono.Trim());
             cmd.Parameters.AddWithValue("email", usuario.Email.Trim().ToLowerInvariant());
-            cmd.Parameters.AddWithValue("user_name", usuario.UserName.Trim().ToLowerInvariant());
+            cmd.Parameters.AddWithValue(ParamUserName, usuario.UserName.Trim().ToLowerInvariant());
             cmd.Parameters.AddWithValue("role", usuario.Role.Trim());
             cmd.Parameters.AddWithValue("must_change_password", usuario.MustChangePassword == 1);
             cmd.Parameters.AddWithValue("activo", usuario.Activo == 1);
             cmd.Parameters.AddWithValue("fecha_registro", AsegurarUtc(usuario.FechaRegistro == default ? DateTime.UtcNow : usuario.FechaRegistro));
-            AgregarParametroNullable(cmd, "ultima_actualizacion", usuario.UltimaActualizacion.HasValue ? AsegurarUtc(usuario.UltimaActualizacion.Value) : null);
-            AgregarParametroNullable(cmd, "usuario_auditoria_id", usuario.IdUsuarioCreador);
+            AgregarParametroNullable(cmd, ParamUltimaActualizacion, usuario.UltimaActualizacion.HasValue ? AsegurarUtc(usuario.UltimaActualizacion.Value) : null);
+            AgregarParametroNullable(cmd, ParamUsuarioAuditoriaId, usuario.IdUsuarioCreador);
 
             if (incluirPasswordHash)
                 cmd.Parameters.AddWithValue("password_hash", usuario.PasswordHash);
@@ -380,18 +383,18 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
                 CiExtencion = reader.GetString(reader.GetOrdinal("ci_extension")),
                 Telefono = reader.GetString(reader.GetOrdinal("telefono")),
                 Email = reader.GetString(reader.GetOrdinal("email")),
-                UserName = reader.GetString(reader.GetOrdinal("user_name")),
+                UserName = reader.GetString(reader.GetOrdinal(ParamUserName)),
                 PasswordHash = reader.GetString(reader.GetOrdinal("password_hash")),
                 Role = reader.GetString(reader.GetOrdinal("role")),
                 MustChangePassword = reader.GetBoolean(reader.GetOrdinal("must_change_password")) ? (sbyte)1 : (sbyte)0,
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo")) ? (sbyte)1 : (sbyte)0,
                 FechaRegistro = AsegurarUtc(reader.GetDateTime(reader.GetOrdinal("fecha_registro"))),
-                UltimaActualizacion = reader.IsDBNull(reader.GetOrdinal("ultima_actualizacion"))
+                UltimaActualizacion = reader.IsDBNull(reader.GetOrdinal(ParamUltimaActualizacion))
                     ? null
-                    : AsegurarUtc(reader.GetDateTime(reader.GetOrdinal("ultima_actualizacion"))),
-                IdUsuarioCreador = reader.IsDBNull(reader.GetOrdinal("usuario_auditoria_id"))
+                    : AsegurarUtc(reader.GetDateTime(reader.GetOrdinal(ParamUltimaActualizacion))),
+                IdUsuarioCreador = reader.IsDBNull(reader.GetOrdinal(ParamUsuarioAuditoriaId))
                     ? null
-                    : reader.GetInt32(reader.GetOrdinal("usuario_auditoria_id"))
+                    : reader.GetInt32(reader.GetOrdinal(ParamUsuarioAuditoriaId))
             };
         }
     }
