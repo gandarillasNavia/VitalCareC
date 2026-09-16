@@ -8,6 +8,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 {
     public class UsuarioTokenRepository : IUsuarioTokenRepository
     {
+        private const string ParamTokenHash = "token_hash";
+        private const string ParamTipoToken = "tipo_token";
         private readonly string _connectionString;
 
         public UsuarioTokenRepository()
@@ -45,8 +47,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 
             NpgsqlCommand command = new NpgsqlCommand(query);
             command.Parameters.AddWithValue("usuario_id", token.UsuarioIdUsuario);
-            command.Parameters.AddWithValue("token_hash", token.TokenHash);
-            command.Parameters.AddWithValue("tipo_token", token.TipoToken);
+            command.Parameters.AddWithValue(ParamTokenHash, token.TokenHash);
+            command.Parameters.AddWithValue(ParamTipoToken, token.TipoToken);
             command.Parameters.AddWithValue("fecha_creacion", AsegurarUtc(token.FechaCreacion));
             command.Parameters.AddWithValue("fecha_expiracion", AsegurarUtc(token.FechaExpiracion));
             command.Parameters.AddWithValue("revocado", token.Revocado == 1);
@@ -66,7 +68,7 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
                 LIMIT 1";
 
             NpgsqlCommand command = new NpgsqlCommand(query);
-            command.Parameters.AddWithValue("token_hash", tokenHash);
+            command.Parameters.AddWithValue(ParamTokenHash, tokenHash);
 
             return RepositoryDbHelper.ExecuteReaderSingle(_connectionString, command, MapearUsuarioToken);
         }
@@ -83,8 +85,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
                 LIMIT 1";
 
             NpgsqlCommand command = new NpgsqlCommand(query);
-            command.Parameters.AddWithValue("token_hash", tokenHash);
-            command.Parameters.AddWithValue("tipo_token", tipoToken);
+            command.Parameters.AddWithValue(ParamTokenHash, tokenHash);
+            command.Parameters.AddWithValue(ParamTipoToken, tipoToken);
 
             return RepositoryDbHelper.ExecuteReaderSingle(_connectionString, command, MapearUsuarioToken);
         }
@@ -116,7 +118,7 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 
             NpgsqlCommand command = new NpgsqlCommand(query);
             command.Parameters.AddWithValue("usuario_id", idUsuario);
-            command.Parameters.AddWithValue("tipo_token", tipoToken);
+            command.Parameters.AddWithValue(ParamTipoToken, tipoToken);
 
             return RepositoryDbHelper.ExecuteNonQuery(_connectionString, command);
         }
@@ -144,8 +146,8 @@ namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
             {
                 IdUsuarioToken = reader.GetInt32(reader.GetOrdinal("id")),
                 UsuarioIdUsuario = reader.GetInt32(reader.GetOrdinal("usuario_id")),
-                TokenHash = reader.GetString(reader.GetOrdinal("token_hash")),
-                TipoToken = reader.GetString(reader.GetOrdinal("tipo_token")),
+                TokenHash = reader.GetString(reader.GetOrdinal(ParamTokenHash)),
+                TipoToken = reader.GetString(reader.GetOrdinal(ParamTipoToken)),
                 FechaCreacion = AsegurarUtc(reader.GetDateTime(reader.GetOrdinal("fecha_creacion"))),
                 FechaExpiracion = AsegurarUtc(reader.GetDateTime(reader.GetOrdinal("fecha_expiracion"))),
                 Revocado = reader.GetBoolean(reader.GetOrdinal("revocado")) ? (sbyte)1 : (sbyte)0,
