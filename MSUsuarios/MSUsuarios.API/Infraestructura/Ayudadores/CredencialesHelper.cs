@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             string baseUser = $"{nombre}.{ciNormalizado}".ToLower();
 
             baseUser = QuitarTildes(baseUser);
-            baseUser = Regex.Replace(baseUser, @"[^a-z0-9\.]", "");
+            baseUser = Regex.Replace(baseUser, @"[^a-z0-9\.]", "", RegexOptions.None, TimeSpan.FromMilliseconds(100));
 
             return baseUser;
         }
@@ -76,7 +77,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
                 return string.Empty;
 
             ci = ci.Trim().ToUpper();
-            return Regex.Replace(ci, @"[^A-Z0-9]", "");
+            return Regex.Replace(ci, @"[^A-Z0-9]", "", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         private static string QuitarTildes(string texto)
