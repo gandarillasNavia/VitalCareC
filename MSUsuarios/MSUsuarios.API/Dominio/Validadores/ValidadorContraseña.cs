@@ -5,7 +5,7 @@ namespace MSUsuarios.Dominio.Validadores
 {
     public class ValidadorContraseña : UsuarioValidacionBase
     {
-        public static Result ValidarComplexidad(string? password)
+        public Result ValidarComplexidad(string? password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 return Result.Fail("La contraseña es obligatoria.");
@@ -27,7 +27,7 @@ namespace MSUsuarios.Dominio.Validadores
             return Result.Ok();
         }
 
-        public static Result ValidarCoincidencia(string? password, string? confirmacion)
+        public Result ValidarCoincidencia(string? password, string? confirmacion)
         {
             if (password != confirmacion)
                 return Result.Fail("La contraseña y su confirmación no coinciden.");
@@ -35,7 +35,7 @@ namespace MSUsuarios.Dominio.Validadores
             return Result.Ok();
         }
 
-        public static Result ValidarDiferencia(string? passwordActual, string? passwordNueva)
+        public Result ValidarDiferencia(string? passwordActual, string? passwordNueva)
         {
             if (passwordActual == passwordNueva)
                 return Result.Fail("La nueva contraseña debe ser diferente a la actual.");
