@@ -11,6 +11,7 @@ namespace MSUsuarios.App.Servicios
 {
     public class UsuarioService : IUsuarioService
     {
+        private const string MensajeUsuarioNoExiste = "El usuario no existe.";
         private readonly IUsuarioRepository _repository;
         private readonly UsuarioValidadores _validadores;        
         private readonly IEmailService _emailService;
@@ -106,7 +107,7 @@ namespace MSUsuarios.App.Servicios
 
             Usuario? usuarioActual = _repository.GetById(dto.IdUsuario);
             if (usuarioActual == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             AplicarActualizacion(usuarioActual, dto);
 
@@ -133,7 +134,7 @@ namespace MSUsuarios.App.Servicios
 
             Usuario? usuario = _repository.GetById(idUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             int filasAfectadas = _repository.SoftDelete(usuario, idUsuarioSesion);
             return filasAfectadas > 0
@@ -181,7 +182,7 @@ namespace MSUsuarios.App.Servicios
         {
             Usuario? usuario = _repository.GetById(idUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             // Validar el cambio de contraseña (verifica actual, complejidad, coincidencia, diferencia)
             Result resultadoValidacion = _validadores.CambioContraseña.Validar(passwordActual, nuevaPassword, nuevaPassword, usuario);
@@ -219,7 +220,7 @@ namespace MSUsuarios.App.Servicios
             // Obtener usuario
             Usuario? usuario = _repository.GetById(token.UsuarioIdUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             // Validar complejidad de contraseña
 Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.NuevaPassword);
@@ -263,7 +264,7 @@ Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.Nue
             };
         }
 
-        private void AplicarActualizacion(Usuario usuario, UsuarioActualizarDto dto)
+        private static void AplicarActualizacion(Usuario usuario, UsuarioActualizarDto dto)
         {
             if (!string.IsNullOrWhiteSpace(dto.Nombres))
                 usuario.Nombres = StringHelper.LimpiarTexto(dto.Nombres);
@@ -279,7 +280,7 @@ Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.Nue
                 usuario.Role = StringHelper.LimpiarTexto(dto.Role);
         }
 
-        private UsuarioDto? ObtenerYMapear(Func<Usuario?> obtenerUsuario)
+        private static UsuarioDto? ObtenerYMapear(Func<Usuario?> obtenerUsuario)
         {
             Usuario? usuario = obtenerUsuario();
             return usuario == null ? null : MapearDto(usuario);
