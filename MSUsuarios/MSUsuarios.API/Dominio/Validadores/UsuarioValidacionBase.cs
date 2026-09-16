@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace MSUsuarios.Dominio.Validadores
@@ -23,7 +24,7 @@ namespace MSUsuarios.Dominio.Validadores
 
         protected static Result? RegexValido(string valor, string patron, string mensaje)
         {
-            return Regex.IsMatch(valor, patron) ? null : Result.Fail(mensaje);
+            return Regex.IsMatch(valor, patron, RegexOptions.None, TimeSpan.FromMilliseconds(100)) ? null : Result.Fail(mensaje);
         }
 
         protected static Result? EmailValido(string email, bool obligatorio = true)
@@ -39,7 +40,7 @@ namespace MSUsuarios.Dominio.Validadores
             if (email.Length > 100)
                 return Result.Fail("El correo electronico no puede tener mas de 100 caracteres.");
 
-            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("El formato del correo electronico no es valido.");
 
             return null;
