@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
@@ -14,7 +15,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto.Trim(), @"\s+", " ");
+            return Regex.Replace(texto.Trim(), @"\s+", " ", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         public static string QuitarEspacios(string? texto)
@@ -22,7 +23,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto, @"\s+", "");
+            return Regex.Replace(texto, @"\s+", "", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         public static string LimpiarTexto(string? texto)
@@ -30,7 +31,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            texto = Regex.Replace(texto.Trim(), @"\s+", " ");
+            texto = Regex.Replace(texto.Trim(), @"\s+", " ", RegexOptions.None, TimeSpan.FromMilliseconds(100));
             return texto;
         }
 
@@ -49,7 +50,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto, @"\D", "");
+            return Regex.Replace(texto, @"\D", "", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         }
 
         public static string LimpiarCI(string? texto)
@@ -57,7 +58,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(texto))
                 return "";
 
-            return Regex.Replace(texto.Trim(), @"\s+", "").ToUpper();
+            return Regex.Replace(texto.Trim(), @"\s+", "", RegexOptions.None, TimeSpan.FromMilliseconds(100)).ToUpper();
         }
 
         public static bool NombrePareceFragmentado(string? nombres)
