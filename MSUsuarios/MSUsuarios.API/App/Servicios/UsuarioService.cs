@@ -223,7 +223,7 @@ namespace MSUsuarios.App.Servicios
                 return Result.Fail(MensajeUsuarioNoExiste);
 
             // Validar complejidad de contraseña
-Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.NuevaPassword);
+            Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.NuevaPassword);
             if (!resultadoValidacion.IsSuccess)
                 return resultadoValidacion;
 
@@ -243,7 +243,7 @@ Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.Nue
             return Result.Ok();
         }
 
-        private Usuario ConstruirUsuarioNuevo(UsuarioRegistroDto dto, string role, string passwordHash, int? idUsuarioSesion)
+        private static Usuario ConstruirUsuarioNuevo(UsuarioRegistroDto dto, string role, string passwordHash, int? idUsuarioSesion)
         {
             return new Usuario
             {
