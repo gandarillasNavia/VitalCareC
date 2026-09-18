@@ -72,10 +72,6 @@ string jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
 string jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
     ?? builder.Configuration["Jwt:Audience"]
     ?? throw new InvalidOperationException("No se encontro JWT_AUDIENCE en variables de entorno ni Jwt:Audience en configuracion.");
-int jwtExpirationMinutes = int.TryParse(
-    Environment.GetEnvironmentVariable("JWT_EXPIRATION_MINUTES") 
-    ?? builder.Configuration["Jwt:ExpirationMinutes"]?.ToString(), 
-    out int expiration) ? expiration : 60;
 
 builder.Services.AddScoped<UsuarioRepositoryCreator>();
 builder.Services.AddScoped<UsuarioTokenRepositoryCreator>();
