@@ -26,7 +26,7 @@ namespace MSUsuarios.Infraestructura.Ayudadores
                         condicion.Append(" OR ");
                 }
 
-                condicion.Append(")");
+                condicion.Append(')');
             }
 
             return condicion.ToString();
