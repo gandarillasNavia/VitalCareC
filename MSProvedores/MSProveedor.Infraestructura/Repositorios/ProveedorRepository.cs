@@ -8,7 +8,7 @@ namespace MSProveedor.Infraestructura.Repositorios;
 
 public class ProveedorRepository : IProveedorRepository
 {
-    private string CadenaConexion => ConexionStringSingleton.Instancia.CadenaConexion;
+    private static string CadenaConexion => ConexionStringSingleton.Instancia.CadenaConexion;
 
     public async Task<int> CrearAsync(Proveedor proveedor)
     {
