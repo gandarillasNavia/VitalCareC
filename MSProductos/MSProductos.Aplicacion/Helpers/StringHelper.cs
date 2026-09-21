@@ -30,10 +30,7 @@ namespace MSProductos.Aplicacion.Helpers
 
         public static string LimpiarTexto(string? texto)
         {
-            if (string.IsNullOrWhiteSpace(texto))
-                return "";
-
-            return EspaciosRegex().Replace(texto.Trim(), " ");
+            return LimpiarEspacios(texto);
         }
 
         public static string LimpiarTextoMayus(string? texto)
