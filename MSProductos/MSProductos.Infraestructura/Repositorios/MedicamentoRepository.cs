@@ -15,7 +15,7 @@ namespace MSProductos.Infraestructura.Repositorios
     public class MedicamentoRepository : IMedicamentoRepository
     {
         private readonly string connectionString;
-
+        private const string ParametroNombre = "@nombre";
         public MedicamentoRepository()
         {
             connectionString = ConexionStringSingleton.Instancia.CadenaConexion;
@@ -31,7 +31,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", t.Nombre);
+                command.Parameters.AddWithValue(ParametroNombre, t.Nombre);
                 command.Parameters.AddWithValue("@presentacion", t.Presentacion);
                 command.Parameters.AddWithValue("@id_clasificacion", t.IdClasificacion);
                 command.Parameters.AddWithValue("@concentracion", t.Concentracion);
@@ -62,7 +62,7 @@ namespace MSProductos.Infraestructura.Repositorios
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@id", t.Id);
-                command.Parameters.AddWithValue("@nombre", t.Nombre);
+                command.Parameters.AddWithValue(ParametroNombre, t.Nombre);
                 command.Parameters.AddWithValue("@presentacion", t.Presentacion);
                 command.Parameters.AddWithValue("@id_clasificacion", t.IdClasificacion);
                 command.Parameters.AddWithValue("@concentracion", t.Concentracion);
@@ -175,7 +175,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", nombre);
+                command.Parameters.AddWithValue(ParametroNombre, nombre);
 
                 connection.Open();
                 int cantidad = Convert.ToInt32(command.ExecuteScalar());
@@ -195,7 +195,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", nombre);
+                command.Parameters.AddWithValue(ParametroNombre, nombre);
                 command.Parameters.AddWithValue("@id", idMedicamento);
 
                 connection.Open();
