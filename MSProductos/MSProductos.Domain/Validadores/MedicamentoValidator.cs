@@ -23,42 +23,42 @@ namespace MSProductos.Dominio.Validadores {
                 ?? 
                 Result.Ok(); 
         } 
-        private Result? ValidarNombre(string nombre) 
+        private static Result? ValidarNombre(string nombre) 
         { 
             return ValidadorTexto.Obligatorio(nombre, "El nombre del medicamento es obligatorio.") 
                 ?? ValidadorTexto.Longitud(nombre, 3, 100, "El nombre debe tener entre 3 y 100 caracteres.") 
                 ?? ValidadorTexto.Patron(nombre, @"^[\p{L}0-9\s]+$", "El nombre del medicamento no debe contener signos ni caracteres especiales."); 
         } 
-        private Result? ValidarPresentacion(string presentacion) 
+        private static Result? ValidarPresentacion(string presentacion) 
         { 
             return ValidadorTexto.Obligatorio(presentacion, "La presentación es obligatoria.") 
                 ?? ValidadorTexto.Longitud(presentacion, 3, 50, "La presentación debe tener entre 3 y 50 caracteres.") 
                 ?? ValidadorTexto.Patron(presentacion, @"^[\p{L}0-9\s]+$", "La presentación no debe contener signos ni caracteres especiales."); 
         } 
-        private Result? ValidarIdClasificacion(int idClasificacion) 
+        private static Result? ValidarIdClasificacion(int idClasificacion) 
         { 
             if (idClasificacion <= 0) 
                 return Result.Fail("La clasificación es obligatoria."); 
             return null; 
         } 
-        private Result? ValidarConcentracion(string concentracion) 
+        private static Result? ValidarConcentracion(string concentracion) 
         { 
             return ValidadorTexto.Obligatorio(concentracion, "La concentración es obligatoria.") 
                 ?? ValidadorTexto.Longitud(concentracion, 2, 50, "La concentración debe tener entre 2 y 50 caracteres."); 
         } 
-        private Result? ValidarPrecio(decimal precio) 
+        private static Result? ValidarPrecio(decimal precio) 
         { 
             if (precio < 0)
                 return Result.Fail("El precio no puede ser negativo."); 
             return null; 
         } 
-        private Result? ValidarStock(int stock) 
+        private static Result? ValidarStock(int stock) 
         { 
             if (stock < 0) 
                 return Result.Fail("El stock no puede ser negativo."); 
             return null; 
         } 
-        private Result? ValidarIdUsuario(int idUsuario) 
+        private static Result? ValidarIdUsuario(int idUsuario) 
         { 
             if (idUsuario <= 0) 
                 return Result.Fail("El usuario es obligatorio."); 

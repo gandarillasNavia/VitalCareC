@@ -228,7 +228,7 @@ namespace MSProductos.Infraestructura.Repositorios
             };
         }
 
-        private string ConstruirQuery(string filtro)
+        private static string ConstruirQuery(string filtro)
         {
             string query = @"SELECT 
                             m.id,
