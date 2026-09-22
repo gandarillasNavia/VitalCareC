@@ -145,46 +145,7 @@ namespace MSVentas.Infraestructura.Persistencia.Repositorios
             Venta? venta = RepositoryDbHelper.ExecuteReaderSingle(
                 connectionString,
                 command,
-                reader => new Venta
-                {
-                    Id = Convert.ToInt32(reader["id"]),
-                    FechaHora = Convert.ToDateTime(reader["fecha_hora"]),
-                    Total = Convert.ToDecimal(reader["total"]),
-                    MetodoPago = StringHelper.LimpiarEspacios(
-                        reader["metodo_pago"]?.ToString()
-                    ),
-                    IdCliente = Convert.ToInt32(reader["Cliente_idCliente"]),
-                    IdUsuario = Convert.ToInt32(reader["usuario_idUsuario"]),
-                    Estado = Convert.ToInt16(reader["estado"]),
-                    FechaRegistro = Convert.ToDateTime(reader["fecha_registro"]),
-                    UltimaActualizacion = reader["ultima_actualizacion"] == DBNull.Value
-                        ? null
-                        : Convert.ToDateTime(reader["ultima_actualizacion"]),
-                    IdUsuarioEditor = reader["Id_usuario_editor"] == DBNull.Value
-                        ? null
-                        : Convert.ToInt32(reader["Id_usuario_editor"]),
-                    Nit = reader["nit"] == DBNull.Value
-                        ? string.Empty
-                        : StringHelper.LimpiarEspacios(reader["nit"]?.ToString()),
-                    RazonSocial = reader["razon_social"] == DBNull.Value
-                        ? string.Empty
-                        : StringHelper.LimpiarEspacios(reader["razon_social"]?.ToString()),
-                    EstadoSaga = reader["estado_saga"] == DBNull.Value
-                        ? "PENDIENTE_STOCK"
-                        : StringHelper.LimpiarEspacios(reader["estado_saga"]?.ToString()),
-
-                    MotivoFalloSaga = reader["motivo_fallo_saga"] == DBNull.Value
-                        ? null
-                        : StringHelper.LimpiarEspacios(reader["motivo_fallo_saga"]?.ToString()),
-
-                    FechaConfirmacionSaga = reader["fecha_confirmacion_saga"] == DBNull.Value
-                        ? null
-                        : Convert.ToDateTime(reader["fecha_confirmacion_saga"]),
-
-                    FechaCompensacionSaga = reader["fecha_compensacion_saga"] == DBNull.Value
-                        ? null
-                        : Convert.ToDateTime(reader["fecha_compensacion_saga"])
-                }
+                MapVenta
             );
 
             if (venta != null)
@@ -193,6 +154,69 @@ namespace MSVentas.Infraestructura.Persistencia.Repositorios
             }
 
             return venta;
+        }
+
+        private static Venta MapVenta(MySqlDataReader reader)
+        {
+            return new Venta
+            {
+                Id = Convert.ToInt32(reader["id"]),
+                FechaHora = Convert.ToDateTime(reader["fecha_hora"]),
+                Total = Convert.ToDecimal(reader["total"]),
+
+                MetodoPago = StringHelper.LimpiarEspacios(
+                    reader["metodo_pago"]?.ToString()
+                ),
+
+                IdCliente = Convert.ToInt32(reader["Cliente_idCliente"]),
+                IdUsuario = Convert.ToInt32(reader["usuario_idUsuario"]),
+                Estado = Convert.ToInt16(reader["estado"]),
+                FechaRegistro = Convert.ToDateTime(reader["fecha_registro"]),
+
+                UltimaActualizacion = reader["ultima_actualizacion"] == DBNull.Value
+                    ? null
+                    : Convert.ToDateTime(reader["ultima_actualizacion"]),
+
+                IdUsuarioEditor = reader["Id_usuario_editor"] == DBNull.Value
+                    ? null
+                    : Convert.ToInt32(reader["Id_usuario_editor"]),
+
+                Nit = reader["nit"] == DBNull.Value
+                    ? string.Empty
+                    : StringHelper.LimpiarEspacios(
+                        reader["nit"]?.ToString()
+                    ),
+
+                RazonSocial = reader["razon_social"] == DBNull.Value
+                    ? string.Empty
+                    : StringHelper.LimpiarEspacios(
+                        reader["razon_social"]?.ToString()
+                    ),
+
+                EstadoSaga = reader["estado_saga"] == DBNull.Value
+                    ? "PENDIENTE_STOCK"
+                    : StringHelper.LimpiarEspacios(
+                        reader["estado_saga"]?.ToString()
+                    ),
+
+                MotivoFalloSaga = reader["motivo_fallo_saga"] == DBNull.Value
+                    ? null
+                    : StringHelper.LimpiarEspacios(
+                        reader["motivo_fallo_saga"]?.ToString()
+                    ),
+
+                FechaConfirmacionSaga = reader["fecha_confirmacion_saga"] == DBNull.Value
+                    ? null
+                    : Convert.ToDateTime(
+                        reader["fecha_confirmacion_saga"]
+                    ),
+
+                FechaCompensacionSaga = reader["fecha_compensacion_saga"] == DBNull.Value
+                    ? null
+                    : Convert.ToDateTime(
+                        reader["fecha_compensacion_saga"]
+                    )
+            };
         }
 
         public List<DetalleVenta> GetDetallesByVentaId(int idVenta)

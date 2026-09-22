@@ -61,82 +61,134 @@ namespace MSVentas.Infraestructura.Ayudadores
 
             return Regex.Replace(texto.Trim(), @"\s+", "", RegexOptions.None, TimeSpan.FromSeconds(1)).ToUpper();
         }
-        public static bool NombrePareceFragmentado(string? nombres)
+       public static bool NombrePareceFragmentado(string? nombres)
         {
-                nombres = LimpiarTexto(nombres);
+            nombres = LimpiarTexto(nombres);
 
             if (string.IsNullOrWhiteSpace(nombres))
                 return true;
 
-            string[] partes = nombres.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] partes = nombres.Split(
+                ' ',
+                StringSplitOptions.RemoveEmptyEntries
+            );
 
             if (partes.Length == 0)
                 return true;
 
-            int palabrasDeUnCaracter = partes.Count(p => p.Length == 1 && !EsConectorValido(p));
-            int palabrasCortasNoValidas = partes.Count(p => p.Length <= 2 && !EsConectorValido(p));
+            int palabrasDeUnCaracter = ContarPalabrasDeUnCaracter(partes);
+            int palabrasCortasNoValidas = ContarPalabrasCortasNoValidas(partes);
 
             if (palabrasDeUnCaracter >= 2)
                 return true;
 
-            if (partes.Length == 2)
-            {
-                bool primeraEsCortaInvalida = partes[0].Length <= 2 && !EsConectorValido(partes[0]);
-                bool segundaEsCortaInvalida = partes[1].Length <= 2 && !EsConectorValido(partes[1]);
-
-                if ((partes[0].Length >= 3 && segundaEsCortaInvalida) ||
-                    (primeraEsCortaInvalida && partes[1].Length >= 3))
-                    return true;
-            }
-
-            if (partes.Length >= 3 && palabrasCortasNoValidas >= 2)
+            if (TieneCombinacionCortaInvalida(partes))
                 return true;
 
-            if (partes.Length >= 4 && palabrasCortasNoValidas >= 3)
+            if (TieneDemasiadasPalabrasCortas(partes, palabrasCortasNoValidas))
                 return true;
 
             return false;
         }
 
-            public static bool ApellidoPareceFragmentado(string? apellido)
-            {
-                apellido = LimpiarTexto(apellido);
+        private static int ContarPalabrasDeUnCaracter(string[] partes)
+        {
+            return partes.Count(
+                p => p.Length == 1 && !EsConectorValido(p)
+            );
+        }
 
-                if (string.IsNullOrWhiteSpace(apellido))
-                    return true;
+        private static int ContarPalabrasCortasNoValidas(string[] partes)
+        {
+            return partes.Count(
+                p => p.Length <= 2 && !EsConectorValido(p)
+            );
+        }
 
-                string[] partes = apellido.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                if (partes.Length == 0)
-                    return true;
-
-                if (partes.Any(p => p.Length == 1))
-                    return true;
-
-                if (partes.Length == 2)
-                {
-                    bool primeraEsConector = EsConectorValido(partes[0]);
-                    bool segundaEsConector = EsConectorValido(partes[1]);
-
-                    if (!primeraEsConector && !segundaEsConector)
-                    {
-                        if ((partes[0].Length >= 3 && partes[1].Length <= 2) ||
-                            (partes[0].Length <= 2 && partes[1].Length >= 3))
-                        {
-                            return true;
-                        }
-                    }
-                }
-
-                if (partes.Length >= 3)
-                {
-                    int cortasNoValidas = partes.Count(p => p.Length <= 2 && !EsConectorValido(p));
-                    if (cortasNoValidas >= 1)
-                        return true;
-                }
-
+        private static bool TieneCombinacionCortaInvalida(string[] partes)
+        {
+            if (partes.Length != 2)
                 return false;
-            }
+
+            bool primeraEsCortaInvalida =
+                partes[0].Length <= 2 &&
+                !EsConectorValido(partes[0]);
+
+            bool segundaEsCortaInvalida =
+                partes[1].Length <= 2 &&
+                !EsConectorValido(partes[1]);
+
+            return (partes[0].Length >= 3 && segundaEsCortaInvalida) ||
+                (primeraEsCortaInvalida && partes[1].Length >= 3);
+        }
+
+        private static bool TieneDemasiadasPalabrasCortas(
+            string[] partes,
+            int palabrasCortasNoValidas)
+        {
+            if (partes.Length >= 4 && palabrasCortasNoValidas >= 3)
+                return true;
+
+            return partes.Length >= 3 &&
+                palabrasCortasNoValidas >= 2;
+        }
+
+        public static bool ApellidoPareceFragmentado(string? apellido)
+        {
+            apellido = LimpiarTexto(apellido);
+
+            if (string.IsNullOrWhiteSpace(apellido))
+                return true;
+
+            string[] partes = apellido.Split(
+                ' ',
+                StringSplitOptions.RemoveEmptyEntries
+            );
+
+            if (partes.Length == 0)
+                return true;
+
+            if (TienePalabraDeUnCaracter(partes))
+                return true;
+
+            if (TieneCombinacionApellidoInvalida(partes))
+                return true;
+
+            return TienePalabraCortaNoValida(partes);
+        }
+
+        private static bool TienePalabraDeUnCaracter(string[] partes)
+        {
+            return partes.Any(p => p.Length == 1);
+        }
+
+        private static bool TieneCombinacionApellidoInvalida(string[] partes)
+        {
+            if (partes.Length != 2)
+                return false;
+
+            bool primeraEsConector = EsConectorValido(partes[0]);
+            bool segundaEsConector = EsConectorValido(partes[1]);
+
+            if (primeraEsConector || segundaEsConector)
+                return false;
+
+            return (partes[0].Length >= 3 && partes[1].Length <= 2) ||
+                (partes[0].Length <= 2 && partes[1].Length >= 3);
+        }
+
+        private static bool TienePalabraCortaNoValida(string[] partes)
+        {
+            if (partes.Length < 3)
+                return false;
+
+            int cortasNoValidas = partes.Count(
+                p => p.Length <= 2 && !EsConectorValido(p)
+            );
+
+            return cortasNoValidas >= 1;
+        }
+
         private static readonly HashSet<string> ConectoresValidosNombre = new(StringComparer.OrdinalIgnoreCase)
         {
             "de", "del", "la", "las", "los", "san", "santa", "van", "von", "da", "das", "do", "dos"
