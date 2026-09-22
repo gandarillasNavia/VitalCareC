@@ -137,8 +137,13 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 });
             }
 
+            if (!dto.IdCliente.HasValue)
+            {
+                return BadRequest("El IdCliente es obligatorio.");
+            }
+
             Result resultado = _ventaService.Crear(
-                dto.IdCliente,
+                dto.IdCliente.Value,
                 idUsuario.Value,
                 dto.MetodoPago,
                 dto.Nit,
@@ -195,9 +200,14 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 });
             }
 
+            if (!dto.IdCliente.HasValue)
+            {
+                return BadRequest("El IdCliente es obligatorio.");
+            }
+
             Result resultado = _ventaService.Actualizar(
                 idVenta,
-                dto.IdCliente,
+                dto.IdCliente.Value,
                 dto.MetodoPago,
                 dto.Detalles,
                 idUsuarioEditor.Value
