@@ -350,7 +350,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
     public class VentaCrearRequestDto
     {
-        public int IdCliente { get; set; }
+        public int? IdCliente { get; set; }
 
         public string MetodoPago { get; set; } = string.Empty;
 
@@ -364,7 +364,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 
     public class VentaActualizarRequestDto
     {
-        public int IdCliente { get; set; }
+        public int? IdCliente { get; set; }
 
         public string MetodoPago { get; set; } = string.Empty;
 
