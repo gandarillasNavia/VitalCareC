@@ -5,7 +5,7 @@ namespace MSVentas.Infraestructura.Creadores
 {
     public class VentaRepositoryCreator
     {
-        public IVentaRepository CreateRepo()
+        public static IVentaRepository CreateRepo()
         {
             return new VentaRepository();
         }

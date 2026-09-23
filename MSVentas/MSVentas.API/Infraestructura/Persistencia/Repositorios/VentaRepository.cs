@@ -552,7 +552,7 @@ namespace MSVentas.Infraestructura.Persistencia.Repositorios
             }
         }
 
-        private Result InsertarDetalle(
+        private static Result InsertarDetalle(
             MySqlConnection connection,
             MySqlTransaction transaction,
             int idVenta,
@@ -597,7 +597,7 @@ namespace MSVentas.Infraestructura.Persistencia.Repositorios
             return Result.Ok();
         }
 
-        private Result ValidarVentaEditable(
+        private static Result ValidarVentaEditable(
             MySqlConnection connection,
             MySqlTransaction transaction,
             int idVenta)
