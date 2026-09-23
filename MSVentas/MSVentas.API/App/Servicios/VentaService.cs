@@ -80,8 +80,11 @@ namespace MSVentas.App.Servicios
                     metodoPago,
                     detallesInput,
                     null,
-                    nit,
-                    razonSocial
+                    new DatosFacturacion
+                    {
+                        Nit = nit,
+                        RazonSocial = razonSocial
+                    }
                 );
 
                 Result validacion = _validador.Validar(venta);
@@ -89,7 +92,6 @@ namespace MSVentas.App.Servicios
                 if (!validacion.IsSuccess)
                     return validacion;
 
-                //return _repository.RegistrarVenta(venta);
                 Result resultado = _repository.RegistrarVenta(venta);
 
                 if (resultado.IsSuccess)
@@ -149,8 +151,11 @@ namespace MSVentas.App.Servicios
                     metodoPago,
                     detallesInput,
                     idUsuarioEditor,
-                    ventaExistente.Nit,
-                    ventaExistente.RazonSocial
+                    new DatosFacturacion
+                    {
+                        Nit = ventaExistente.Nit,
+                        RazonSocial = ventaExistente.RazonSocial
+                    }
                 );
 
                 Result validacion = _validador.Validar(venta);
@@ -219,8 +224,7 @@ namespace MSVentas.App.Servicios
             string metodoPago,
             List<DetalleVentaInputDto> detallesInput,
             int? idUsuarioEditor,
-            string? nit,
-            string? razonSocial)
+            DatosFacturacion datosFacturacion)
         {
             if (idCliente <= 0)
                 throw new InvalidOperationException("El cliente no es válido.");
@@ -246,8 +250,8 @@ namespace MSVentas.App.Servicios
                 IdUsuario = idUsuario,
                 IdUsuarioEditor = idUsuarioEditor,
                 MetodoPago = metodoPago,
-                Nit = StringHelper.LimpiarEspacios(nit),
-                RazonSocial = StringHelper.LimpiarEspacios(razonSocial),
+                Nit = StringHelper.LimpiarEspacios(datosFacturacion.Nit),
+                RazonSocial = StringHelper.LimpiarEspacios(datosFacturacion.RazonSocial),
                 Total = total,
                 Detalles = detalles
             };
