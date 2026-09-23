@@ -3,7 +3,7 @@ using MSVentas.Infraestructura.Persistencia.Repositorios;
 
 namespace MSVentas.Infraestructura.Creadores
 {
-    public class VentaRepositoryCreator
+    public protected class VentaRepositoryCreator
     {
         public static IVentaRepository CreateRepo()
         {
