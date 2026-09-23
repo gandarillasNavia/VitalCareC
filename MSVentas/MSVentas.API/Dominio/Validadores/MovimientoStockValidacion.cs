@@ -3,9 +3,9 @@ using MSVentas.App.DTOs;
 
 namespace MSVentas.Dominio.Validadores
 {
-    public class MovimientoStockValidacion : IResult<MovimientoStockDTO>
+    public class MovimientoStockValidacion : IResult<MovimientoStockDto>
     {
-        public Result Validar(MovimientoStockDTO movimiento)
+        public Result Validar(MovimientoStockDto movimiento)
         {
             return ValidarIdMedicamento(movimiento.IdMedicamento)
                 ?? ValidarCantidad(movimiento.Cantidad)
@@ -42,7 +42,7 @@ namespace MSVentas.Dominio.Validadores
             return null;
         }
 
-        private static Result? ValidarStockSuficiente(MovimientoStockDTO movimiento)
+        private static Result? ValidarStockSuficiente(MovimientoStockDto movimiento)
         {
             if (movimiento.EsEntrada)
                 return null;
