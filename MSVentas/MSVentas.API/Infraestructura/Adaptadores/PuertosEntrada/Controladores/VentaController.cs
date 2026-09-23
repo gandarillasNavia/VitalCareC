@@ -24,6 +24,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult ObtenerTodos([FromQuery] string? filtro)
         {
             DataTable tabla = string.IsNullOrWhiteSpace(filtro)
@@ -38,6 +39,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpGet("reportes/recaudacion-medicamentos")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult ObtenerRecaudacionPorMedicamento(
             [FromQuery] DateTime? desde,
             [FromQuery] DateTime? hasta)
@@ -59,6 +61,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpGet("{idVenta:int}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult ObtenerPorId(int idVenta)
         {
             if (idVenta <= 0)
@@ -85,8 +88,8 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
                 data = MapearVentaRespuesta(venta)
             });
         }
-
         [HttpGet("{idVenta:int}/detalles")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult ObtenerDetalles(int idVenta)
         {
             if (idVenta <= 0)
@@ -117,6 +120,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(object), StatusCodes.Status201Created)]
         public IActionResult Crear([FromBody] VentaCrearRequestDto dto)
         {
             int? idUsuario = ObtenerIdUsuarioSesion();
@@ -170,6 +174,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpPut("{idVenta:int}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult Actualizar(
             int idVenta,
             [FromBody] VentaActualizarRequestDto dto)
@@ -228,6 +233,7 @@ namespace MSVentas.Infraestructura.Adaptadores.PuertosEntrada.Controladores
         }
 
         [HttpDelete("{idVenta:int}")]
+        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
         public IActionResult Eliminar(int idVenta)
         {
             int? idUsuarioEditor = ObtenerIdUsuarioSesion();
