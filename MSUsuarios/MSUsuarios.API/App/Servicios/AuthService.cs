@@ -70,7 +70,7 @@ namespace MSUsuarios.App.Servicios
             return Result.Ok();
         }
 
-        private bool EsUsuarioVentasDePrueba(string emailOUserName, string password)
+        private static bool EsUsuarioVentasDePrueba(string emailOUserName, string password)
         {
             return emailOUserName.Equals("adminventas", StringComparison.OrdinalIgnoreCase)
                 && password == "Admin123!";
@@ -106,7 +106,7 @@ namespace MSUsuarios.App.Servicios
             return Result.Ok();
         }
 
-        private Result ValidarLoginDto(UsuarioLoginRequestDto dto)
+        private static Result ValidarLoginDto(UsuarioLoginRequestDto dto)
         {
             if (dto == null)
                 return Result.Fail("Los datos de inicio de sesion son requeridos.");

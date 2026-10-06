@@ -1,5 +1,7 @@
+using System;
 using System.Net;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
 using MSUsuarios.App.Interfaces;
 using MSUsuarios.Dominio.Modelos;
 using MSUsuarios.Dominio.Validadores;
@@ -33,9 +35,9 @@ namespace MSUsuarios.App.Servicios
                     ?? "no-reply@example.com",
                 Password = ObtenerValorConfiguracion(configuration, "SMTP_PASSWORD", "SmtpSettings:Password")
                     ?? string.Empty,
-                UseSsl = bool.TryParse(
+                UseSsl = !bool.TryParse(
                     ObtenerValorConfiguracion(configuration, "SMTP_USE_SSL", "SmtpSettings:UseSsl"),
-                    out bool ssl) ? ssl : true
+                    out bool ssl) || ssl
             };
         }
 
@@ -97,11 +99,14 @@ namespace MSUsuarios.App.Servicios
                 message.Body = cuerpoHtml;
                 message.IsBodyHtml = true;
 
-                using SmtpClient client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port);
-                client.Credentials = new NetworkCredential(
-                    _smtpSettings.RemitenteEmail,
-                    _smtpSettings.Password
-                );
+                using SmtpClient client = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
+                {
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(
+                        _smtpSettings.RemitenteEmail,
+                        _smtpSettings.Password
+                    )
+                };
                 client.EnableSsl = _smtpSettings.UseSsl;
                 client.Timeout = 10000; // 10 segundos timeout
 
@@ -119,9 +124,7 @@ namespace MSUsuarios.App.Servicios
             }
         }
 
-
-
-        private string ConstruirHtmlActivacionCuenta(
+        private static string ConstruirHtmlActivacionCuenta(
             string nombres,
             string userName,
             string passwordTemporal,

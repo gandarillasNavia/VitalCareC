@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace MSUsuarios.Dominio.Validadores
@@ -14,13 +15,13 @@ namespace MSUsuarios.Dominio.Validadores
             if (password.Length < 8)
                 return Result.Fail("La contraseña debe tener al menos 8 caracteres.");
 
-            if (!Regex.IsMatch(password, @"[a-z]"))
+            if (!Regex.IsMatch(password, @"[a-z]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos una letra minúscula.");
 
-            if (!Regex.IsMatch(password, @"[A-Z]"))
+            if (!Regex.IsMatch(password, @"[A-Z]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos una letra mayúscula.");
 
-            if (!Regex.IsMatch(password, @"[0-9]"))
+            if (!Regex.IsMatch(password, @"[0-9]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos un número.");
 
             return Result.Ok();

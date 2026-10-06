@@ -11,42 +11,29 @@ namespace MSUsuarios.App.Servicios
 {
     public class UsuarioService : IUsuarioService
     {
+        private const string MensajeUsuarioNoExiste = "El usuario no existe.";
         private readonly IUsuarioRepository _repository;
-        private readonly UsuarioValidacionGeneral _validacionGeneral;
-        private readonly ValidadorContraseña _validadorContraseña;
-        private readonly ValidadorCambioContraseña _validadorCambioContraseña;
-        private readonly ITokenService _tokenService;
+        private readonly UsuarioValidadores _validadores;        
         private readonly IEmailService _emailService;
         private readonly IUsuarioTokenService _usuarioTokenService;
-        private readonly string _frontendBaseUrl;
 
         public UsuarioService(
             IUsuarioRepository repository,
-            UsuarioValidacionGeneral validacionGeneral,
-            ValidadorContraseña validadorContraseña,
-            ValidadorCambioContraseña validadorCambioContraseña,
-            ITokenService tokenService,
+            UsuarioValidadores validadores,
             IEmailService emailService,
-            IUsuarioTokenService usuarioTokenService,
-            IConfiguration configuration)
+            IUsuarioTokenService usuarioTokenService)
         {
             _repository = repository;
-            _validacionGeneral = validacionGeneral;
-            _validadorContraseña = validadorContraseña;
-            _validadorCambioContraseña = validadorCambioContraseña;
-            _tokenService = tokenService;
+            _validadores = validadores;
             _emailService = emailService;
             _usuarioTokenService = usuarioTokenService;
-            _frontendBaseUrl = Environment.GetEnvironmentVariable("FRONTEND_BASE_URL")
-                ?? configuration["Frontend:BaseUrl"]?.TrimEnd('/')
-                ?? "http://localhost:5081";
         }
 
         public Result CrearUsuario(UsuarioRegistroDto dto, string role, int? idUsuarioSesion)
         {
             try
             {
-                Result validacion = _validacionGeneral.ValidarRegistro(dto);
+                Result validacion = _validadores.General.ValidarRegistro(dto);
                 if (!validacion.IsSuccess)
                     return validacion;
 
@@ -114,13 +101,13 @@ namespace MSUsuarios.App.Servicios
 
         public Result ActualizarUsuario(UsuarioActualizarDto dto, int? idUsuarioSesion)
         {
-            Result validacion = _validacionGeneral.ValidarActualizacion(dto);
+            Result validacion = _validadores.General.ValidarActualizacion(dto);
             if (!validacion.IsSuccess)
                 return validacion;
 
             Usuario? usuarioActual = _repository.GetById(dto.IdUsuario);
             if (usuarioActual == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             AplicarActualizacion(usuarioActual, dto);
 
@@ -141,13 +128,13 @@ namespace MSUsuarios.App.Servicios
 
         public Result EliminarUsuario(int idUsuario, int? idUsuarioSesion)
         {
-            Result validacion = _validacionGeneral.ValidarEliminacion(idUsuario);
+            Result validacion = _validadores.General.ValidarEliminacion(idUsuario);
             if (!validacion.IsSuccess)
                 return validacion;
 
             Usuario? usuario = _repository.GetById(idUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             int filasAfectadas = _repository.SoftDelete(usuario, idUsuarioSesion);
             return filasAfectadas > 0
@@ -195,10 +182,10 @@ namespace MSUsuarios.App.Servicios
         {
             Usuario? usuario = _repository.GetById(idUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             // Validar el cambio de contraseña (verifica actual, complejidad, coincidencia, diferencia)
-            Result resultadoValidacion = _validadorCambioContraseña.Validar(passwordActual, nuevaPassword, nuevaPassword, usuario);
+            Result resultadoValidacion = _validadores.CambioContraseña.Validar(passwordActual, nuevaPassword, nuevaPassword, usuario);
             if (!resultadoValidacion.IsSuccess)
                 return resultadoValidacion;
 
@@ -233,10 +220,10 @@ namespace MSUsuarios.App.Servicios
             // Obtener usuario
             Usuario? usuario = _repository.GetById(token.UsuarioIdUsuario);
             if (usuario == null)
-                return Result.Fail("El usuario no existe.");
+                return Result.Fail(MensajeUsuarioNoExiste);
 
             // Validar complejidad de contraseña
-            Result resultadoValidacion = _validadorContraseña.ValidarComplexidad(dto.NuevaPassword);
+            Result resultadoValidacion = _validadores.Contraseña.ValidarComplexidad(dto.NuevaPassword);
             if (!resultadoValidacion.IsSuccess)
                 return resultadoValidacion;
 
@@ -256,7 +243,7 @@ namespace MSUsuarios.App.Servicios
             return Result.Ok();
         }
 
-        private Usuario ConstruirUsuarioNuevo(UsuarioRegistroDto dto, string role, string passwordHash, int? idUsuarioSesion)
+        private static Usuario ConstruirUsuarioNuevo(UsuarioRegistroDto dto, string role, string passwordHash, int? idUsuarioSesion)
         {
             return new Usuario
             {
@@ -277,7 +264,7 @@ namespace MSUsuarios.App.Servicios
             };
         }
 
-        private void AplicarActualizacion(Usuario usuario, UsuarioActualizarDto dto)
+        private static void AplicarActualizacion(Usuario usuario, UsuarioActualizarDto dto)
         {
             if (!string.IsNullOrWhiteSpace(dto.Nombres))
                 usuario.Nombres = StringHelper.LimpiarTexto(dto.Nombres);
@@ -293,7 +280,7 @@ namespace MSUsuarios.App.Servicios
                 usuario.Role = StringHelper.LimpiarTexto(dto.Role);
         }
 
-        private UsuarioDto? ObtenerYMapear(Func<Usuario?> obtenerUsuario)
+        private static UsuarioDto? ObtenerYMapear(Func<Usuario?> obtenerUsuario)
         {
             Usuario? usuario = obtenerUsuario();
             return usuario == null ? null : MapearDto(usuario);
@@ -316,12 +303,6 @@ namespace MSUsuarios.App.Servicios
                 Role = usuario.Role,
                 MustChangePassword = usuario.MustChangePassword
             };
-        }
-
-        private string ConstruirEnlaceFrontend(string rutaRelativa, string tokenPlano)
-        {
-            string tokenSeguro = Uri.EscapeDataString(tokenPlano);
-            return $"{_frontendBaseUrl}{rutaRelativa}?token={tokenSeguro}";
         }
 
         private static string MapearViolacionUnica(string? constraintName)

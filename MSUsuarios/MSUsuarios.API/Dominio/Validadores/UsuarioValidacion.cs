@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using MSUsuarios.App.DTOs;
 using MSUsuarios.Dominio.Modelos;
@@ -82,7 +83,7 @@ namespace MSUsuarios.Dominio.Validadores
             return Result.Ok();
         }
 
-        private Result? ValidarCamposObligatorios(string? nombres, string? apellidoPaterno, string? apellidoMaterno, string? email)
+        private static Result? ValidarCamposObligatorios(string? nombres, string? apellidoPaterno, string? apellidoMaterno, string? email)
         {
             Result? resultado = ValidarTextoSoloLetrasRequerido(nombres, "Nombres")
                 ?? ValidarTextoSoloLetrasRequerido(apellidoPaterno, "Apellido Paterno")
@@ -97,21 +98,21 @@ namespace MSUsuarios.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarCi(string? ci)
+        private static Result? ValidarCi(string? ci)
         {
             if (string.IsNullOrWhiteSpace(ci))
                 return Result.Fail("El numero de carnet es obligatorio.");
 
-            if (ci!.Contains(' '))
+            if (ci.Contains(' '))
                 return Result.Fail("El numero de carnet no debe contener espacios.");
 
-            if (!Regex.IsMatch(ci, @"^\d{6,8}(?:-[A-Za-z0-9]{1,2})?$")) 
+            if (!Regex.IsMatch(ci, @"^\d{6,8}(?:-[A-Za-z0-9]{1,2})?$", RegexOptions.None, TimeSpan.FromMilliseconds(100))) 
                 return Result.Fail("El CI debe tener entre 6 y 8 digitos y un complemento opcional de hasta dos caracteres. Ej. 12345678-1B."); 
 
             return null;
         }
 
-        private Result? ValidarCiExtension(string? ciExtension)
+        private static Result? ValidarCiExtension(string? ciExtension)
         {
             if (string.IsNullOrWhiteSpace(ciExtension))
                 return Result.Fail("Debe seleccionar el lugar de expedición del CI.");
@@ -124,52 +125,52 @@ namespace MSUsuarios.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarTelefono(string? telefono)
+        private static Result? ValidarTelefono(string? telefono)
         {
             if (string.IsNullOrWhiteSpace(telefono))
                 return Result.Fail("El telefono es obligatorio.");
 
-            if (telefono!.Length != 8)
+            if (telefono.Length != 8)
                 return Result.Fail("El telefono debe tener exactamente 8 digitos.");
 
-            if (!Regex.IsMatch(telefono, @"^\d{8}$"))
+            if (!Regex.IsMatch(telefono, @"^\d{8}$", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("El telefono debe contener solo digitos numericos.");
 
             return null;
         }
 
-        private Result? ValidarEmail(string? email)
+        private static Result? ValidarEmail(string? email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return Result.Fail("El email es obligatorio.");
 
-            if (!Regex.IsMatch(email!, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("El formato del email no es valido.");
 
-            if (email!.Length > 255)
+            if (email.Length > 255)
                 return Result.Fail("El email no puede exceder 255 caracteres.");
 
             return null;
         }
 
-        private Result? ValidarPassword(string? password)
+        private static Result? ValidarPassword(string? password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 return Result.Fail("La contraseña es obligatoria.");
 
-            if (password!.Length < 8)
+            if (password.Length < 8)
                 return Result.Fail("La contraseña debe tener al menos 8 caracteres.");
 
             if (password.Length > 128)
                 return Result.Fail("La contraseña no puede exceder 128 caracteres.");
 
-            if (!Regex.IsMatch(password, @"[a-z]"))
+            if (!Regex.IsMatch(password, @"[a-z]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos una letra minúscula.");
 
-            if (!Regex.IsMatch(password, @"[A-Z]"))
+            if (!Regex.IsMatch(password, @"[A-Z]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos una letra mayúscula.");
 
-            if (!Regex.IsMatch(password, @"[0-9]"))
+            if (!Regex.IsMatch(password, @"[0-9]", RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail("La contraseña debe contener al menos un número.");
 
             return null;
@@ -230,7 +231,7 @@ namespace MSUsuarios.Dominio.Validadores
             return null;
         }
 
-        private string? LimpiarTexto(string? texto)
+        private static string? LimpiarTexto(string? texto)
         {
             return texto?.Trim();
         }
@@ -245,7 +246,7 @@ namespace MSUsuarios.Dominio.Validadores
             if (valor.Length > 100)
                 return Result.Fail($"El campo {campo} no puede exceder 100 caracteres.");
 
-            if (!Regex.IsMatch(valor, PatronSoloLetrasYEspacios))
+            if (!Regex.IsMatch(valor, PatronSoloLetrasYEspacios, RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail($"El campo {campo} solo puede contener letras y espacios.");
 
             return null;
@@ -261,7 +262,7 @@ namespace MSUsuarios.Dominio.Validadores
             if (valor.Length > 100)
                 return Result.Fail($"El campo {campo} no puede exceder 100 caracteres.");
 
-            if (!Regex.IsMatch(valor, PatronSoloLetrasYEspacios))
+            if (!Regex.IsMatch(valor, PatronSoloLetrasYEspacios, RegexOptions.None, TimeSpan.FromMilliseconds(100)))
                 return Result.Fail($"El campo {campo} solo puede contener letras y espacios.");
 
             return null;

@@ -16,17 +16,10 @@ namespace MSUsuarios.Infraestructura.Ayudadores
             if (string.IsNullOrWhiteSpace(tokenPlano))
                 throw new ArgumentException("El token no puede ser nulo o vacio.", nameof(tokenPlano));
 
-            using SHA256 sha256 = SHA256.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(tokenPlano);
-            byte[] hashBytes = sha256.ComputeHash(bytes);
+            byte[] hashBytes = SHA256.HashData(bytes);
 
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in hashBytes)
-            {
-                sb.Append(b.ToString("x2"));
-            }
-
-            return sb.ToString();
+            return Convert.ToHexString(hashBytes).ToLowerInvariant();
         }
 
         public static DateTime GenerarFechaExpiracion(int minutosExpiracion)
