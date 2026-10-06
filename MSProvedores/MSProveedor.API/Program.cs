@@ -75,4 +75,4 @@ app.UseAuthorization();
 // 3. Mapear los controladores
 app.MapControllers(); 
 
-app.Run();
+await app.RunAsync();

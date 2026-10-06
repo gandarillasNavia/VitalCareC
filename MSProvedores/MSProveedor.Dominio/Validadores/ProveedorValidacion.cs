@@ -4,9 +4,11 @@ namespace MSProveedor.Dominio.Validadores;
 
 public static class ProveedorValidacion
 {
-    private static readonly Regex NombreRegex = new(@"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$", RegexOptions.Compiled);
-    private static readonly Regex TelefonoRegex = new(@"^\d{8}$", RegexOptions.Compiled);
-    private static readonly Regex CorreoRegex = new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+    private static readonly TimeSpan Timeout = TimeSpan.FromMilliseconds(1000);
+
+    private static readonly Regex NombreRegex = new(@"^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$", RegexOptions.Compiled, Timeout);
+    private static readonly Regex TelefonoRegex = new(@"^\d{8}$", RegexOptions.Compiled, Timeout);
+    private static readonly Regex CorreoRegex = new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase, Timeout);
 
     public static Result<bool> Validar(string nombre, string? telefono, string? correo)
     {
@@ -26,12 +28,12 @@ public static class ProveedorValidacion
             correo.EndsWith("@hotmail", StringComparison.OrdinalIgnoreCase))
             return Result<bool>.Falla("El correo está incompleto (ej. falta '.com').");
 
-        if (!string.IsNullOrWhiteSpace(telefono) && !TelefonoRegex.IsMatch(telefono))
-            return Result<bool>.Falla("El teléfono debe tener exactamente 8 dígitos.");
         if (string.IsNullOrWhiteSpace(telefono))
             return Result<bool>.Falla("El teléfono es un campo obligatorio.");
+
         if (!TelefonoRegex.IsMatch(telefono))
             return Result<bool>.Falla("El teléfono debe tener exactamente 8 dígitos.");
+
         return Result<bool>.Exito(true);
     }
 }
