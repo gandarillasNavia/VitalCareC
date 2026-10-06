@@ -15,6 +15,8 @@ namespace MSProductos.Infraestructura.Repositorios
     public class ClasificacionRepository : IClasificacionRepository
     {
         private readonly string connectionString;
+        private const string ParametroNombre = "@nombre";
+        private const string CampoUltimaActualizacion = "ultima_actualizacion";
 
         public ClasificacionRepository()
         {
@@ -31,7 +33,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", t.Nombre);
+                command.Parameters.AddWithValue(ParametroNombre, t.Nombre);
                 command.Parameters.AddWithValue("@origen", t.Origen);
                 command.Parameters.AddWithValue("@descripcion", t.Descripcion);
                 command.Parameters.AddWithValue("@id_usuario", t.IdUsuario);
@@ -52,14 +54,14 @@ namespace MSProductos.Infraestructura.Repositorios
                                  origen = @origen,
                                  descripcion = @descripcion,
                                  id_usuario = @id_usuario,
-                                 ultima_actualizacion = @ultima_actualizacion
+                                 {CampoUltimaActualizacion} = @ultima_actualizacion
                              WHERE id = @id";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@id", t.Id);
-                command.Parameters.AddWithValue("@nombre", t.Nombre);
+                command.Parameters.AddWithValue(ParametroNombre, t.Nombre);
                 command.Parameters.AddWithValue("@origen", t.Origen);
                 command.Parameters.AddWithValue("@id_usuario", t.IdUsuario);
                 command.Parameters.AddWithValue("@descripcion", t.Descripcion);
@@ -78,7 +80,7 @@ namespace MSProductos.Infraestructura.Repositorios
             string query = @"UPDATE clasificacion
                              SET estado = 0,
                                  id_usuario = @id_usuario,
-                                 ultima_actualizacion = @ultima_actualizacion
+                                 {CampoUltimaActualizacion} = @ultima_actualizacion
                              WHERE id = @id";
 
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -150,10 +152,10 @@ namespace MSProductos.Infraestructura.Repositorios
                 ),
 
                 UltimaActualizacion =
-                    reader["ultima_actualizacion"] == DBNull.Value
+                    reader[CampoUltimaActualizacion] == DBNull.Value
                         ? null
                         : Convert.ToDateTime(
-                            reader["ultima_actualizacion"]
+                            reader[CampoUltimaActualizacion]
                         ),
 
                 IdUsuario = Convert.ToInt32(
@@ -195,9 +197,9 @@ namespace MSProductos.Infraestructura.Repositorios
                             Descripcion = StringHelper.LimpiarEspacios(reader["descripcion"].ToString()),
                             Estado = Convert.ToInt16(reader["estado"]),
                             FechaRegistro = Convert.ToDateTime(reader["fecha_registro"]),
-                            UltimaActualizacion = reader["ultima_actualizacion"] == DBNull.Value
+                            UltimaActualizacion = reader[CampoUltimaActualizacion] == DBNull.Value
                                 ? null
-                                : Convert.ToDateTime(reader["ultima_actualizacion"]),
+                                : Convert.ToDateTime(reader[CampoUltimaActualizacion]),
                             IdUsuario = Convert.ToInt32(reader["id_usuario"])
                         };
                     }
@@ -226,7 +228,7 @@ namespace MSProductos.Infraestructura.Repositorios
             }
         }
 
-        private string ConstruirQuery(string filtro)
+        private static string ConstruirQuery(string filtro)
         {
             string query = @"SELECT id,
                                    nombre,
@@ -274,7 +276,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", nombre);
+                command.Parameters.AddWithValue(ParametroNombre, nombre);
 
                 connection.Open();
                 int cantidad = Convert.ToInt32(command.ExecuteScalar());
@@ -294,7 +296,7 @@ namespace MSProductos.Infraestructura.Repositorios
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@nombre", nombre);
+                command.Parameters.AddWithValue(ParametroNombre, nombre);
                 command.Parameters.AddWithValue("@id", idClasificacion);
 
                 connection.Open();

@@ -154,7 +154,7 @@ namespace MSProductos.Aplicacion.UseCases
             };
         }
 
-        private DateTime ObtenerFechaBolivia()
+        private static DateTime ObtenerFechaBolivia()
         {
             return TimeZoneInfo.ConvertTimeBySystemTimeZoneId(
                 DateTime.UtcNow,
