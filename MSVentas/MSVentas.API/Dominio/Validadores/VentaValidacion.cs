@@ -15,7 +15,7 @@ namespace MSVentas.Dominio.Validadores
                 ?? Result.Ok();
         }
 
-        private Result? ValidarCliente(int idCliente)
+        private static Result? ValidarCliente(int idCliente)
         {
             if (idCliente <= 0)
                 return Result.Fail("La venta debe tener un cliente valido.");
@@ -23,7 +23,7 @@ namespace MSVentas.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarUsuario(int idUsuario)
+        private static Result? ValidarUsuario(int idUsuario)
         {
             if (idUsuario <= 0)
                 return Result.Fail("La venta debe tener un usuario registrador valido.");
@@ -31,7 +31,7 @@ namespace MSVentas.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarMetodoPago(string metodoPago)
+        private static Result? ValidarMetodoPago(string metodoPago)
         {
             if (string.IsNullOrWhiteSpace(metodoPago))
                 return Result.Fail("El metodo de pago es obligatorio.");
@@ -48,7 +48,7 @@ namespace MSVentas.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarDetalles(List<DetalleVenta> detalles)
+        private static Result? ValidarDetalles(List<DetalleVenta> detalles)
         {
             if (detalles == null || detalles.Count == 0)
                 return Result.Fail("No se puede registrar una venta sin al menos un producto.");
@@ -76,7 +76,7 @@ namespace MSVentas.Dominio.Validadores
             return null;
         }
 
-        private Result? ValidarTotal(decimal total)
+        private static Result? ValidarTotal(decimal total)
         {
             if (total <= 0)
                 return Result.Fail("El total de la venta debe ser mayor a 0.");

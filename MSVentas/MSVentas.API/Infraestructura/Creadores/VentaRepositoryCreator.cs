@@ -3,9 +3,9 @@ using MSVentas.Infraestructura.Persistencia.Repositorios;
 
 namespace MSVentas.Infraestructura.Creadores
 {
-    public class VentaRepositoryCreator
+    public static class VentaRepositoryCreator
     {
-        public IVentaRepository CreateRepo()
+        public static IVentaRepository CreateRepo()
         {
             return new VentaRepository();
         }

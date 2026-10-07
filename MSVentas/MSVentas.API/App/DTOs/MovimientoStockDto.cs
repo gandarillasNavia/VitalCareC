@@ -1,6 +1,6 @@
 namespace MSVentas.App.DTOs
 {
-    public class MovimientoStockDTO
+    public class MovimientoStockDto
     {
         public int IdMedicamento { get; set; }
         public int Cantidad { get; set; }
