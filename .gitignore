@@ -49,4 +49,10 @@ _zip_analysis/
 **/.sonarqube/
 init_scan.bat
 sonnar-project.properties
+# Archivos de cobertura y tests
 cobertura.bat
+CoverageReport_MSProductos
+CoverageReport_MSProvedores
+CoverageReport_MSUsuarios
+CoverageReport_MSVentas
+CoverageReport_Unificado
