@@ -49,3 +49,4 @@ _zip_analysis/
 **/.sonarqube/
 init_scan.bat
 sonnar-project.properties
+cobertura.bat
