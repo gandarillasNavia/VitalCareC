@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MSProveedor.Dominio.Entidades;
 
+[ExcludeFromCodeCoverage]
 public class Proveedor
 {
     public int Id { get; set; }
