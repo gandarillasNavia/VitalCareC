@@ -76,7 +76,7 @@ public class ProveedorValidacionTests
         var resultado = ProveedorValidacion.Validar(nombre, telefono, correoIncompleto);
 
         Assert.False(resultado.Success);
-        Assert.Equal("El formato del correo electrónico es inválido.", resultado.Message);
+        Assert.Equal("El correo está incompleto (ej. falta '.com').", resultado.Message);
     }
 
     [Theory]
@@ -90,7 +90,7 @@ public class ProveedorValidacionTests
         var resultado = ProveedorValidacion.Validar(nombre, telefono, correoIncompleto);
 
         Assert.False(resultado.Success);
-        Assert.Equal("El formato del correo electrónico es inválido.", resultado.Message);
+        Assert.Equal("El correo está incompleto (ej. falta '.com').", resultado.Message);
     }
 
     [Theory]
