@@ -1,7 +1,9 @@
 using MSUsuarios.Dominio.Validadores;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
+[ExcludeFromCodeCoverage]
     public static class FiltroHelper
     {
         public static string LimpiarFiltro(string? filtro)

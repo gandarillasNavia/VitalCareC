@@ -1,8 +1,10 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Dominio.Validadores
 {
+    [ExcludeFromCodeCoverage]
     public abstract class UsuarioValidacionBase
     {
         protected const string PatronSoloLetrasYEspacios = @"^[A-Za-zÀ-ÖØ-öø-ÿ ]+$";

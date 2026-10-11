@@ -6,9 +6,11 @@ using MSUsuarios.App.DTOs;
 using MSUsuarios.App.Interfaces;
 using MSUsuarios.Dominio.Validadores;
 using MSUsuarios.Infraestructura.Ayudadores;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/usuarios")]
     public class UsuariosController : ControllerBase
