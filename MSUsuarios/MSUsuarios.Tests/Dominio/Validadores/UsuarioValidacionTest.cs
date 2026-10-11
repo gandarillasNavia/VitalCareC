@@ -240,7 +240,7 @@ public class UsuarioValidacionTests
     public void ValidarActualizacion_CuandoUserNamePerteneseAOtroUsuario_DebeRetornarFalla()
     {
         var dto = CrearDtoActualizarValido();
-        _repositoryMock.GetByUserName(dto.UserName).Returns(new Usuario { IdUsuario = 2 });
+        _repositoryMock.GetByUserName(dto.UserName!).Returns(new Usuario { IdUsuario = 2 });
 
         var resultado = _validador.ValidarActualizacion(dto);
 
