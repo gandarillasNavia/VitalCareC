@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+
 using System.Text.Json.Serialization;
 
 namespace MSUsuarios.App.DTOs
 {
+    [ExcludeFromCodeCoverage]
     public class UsuarioRegistroDto
     {
         public string Nombres { get; set; } = string.Empty;
