@@ -23,7 +23,7 @@ namespace MSProductos.Tests.Aplicacion.Helpers
             Assert.Contains("REPLACE(apellido, ' ', '') LIKE @valor0", resultado);
             Assert.Contains("AND", resultado);
         }
-
+            
         [Fact]
         public void AgregarParametrosLike_DebeAgregarParametrosCorrectos()
         {
