@@ -3,4 +3,5 @@
   <Project Path="MSProductos.Aplicacion/MSProductos.Aplicacion.csproj" />
   <Project Path="MSProductos.Domain/MSProductos.Dominio.csproj" />
   <Project Path="MSProductos.Infraestructura/MSProductos.Infraestructura.csproj" />
+  <Project Path="MSProductos.Tests/MSProductos.Tests.csproj" />
 </Solution>
