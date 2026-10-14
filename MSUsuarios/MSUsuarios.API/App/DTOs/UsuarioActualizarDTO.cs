@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace MSUsuarios.App.DTOs
 {
-    [ExcludeFromCodeCoverage]
+    //[ExcludeFromCodeCoverage]
     public class UsuarioActualizarDto
     {
         [JsonRequired] public int IdUsuario { get; set; }

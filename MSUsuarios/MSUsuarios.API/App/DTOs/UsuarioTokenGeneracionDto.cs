@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.App.DTOs
 {
-    [ExcludeFromCodeCoverage]
+    //[ExcludeFromCodeCoverage]
     public class UsuarioTokenGeneracionDto
     {
         public int IdUsuario { get; set; }

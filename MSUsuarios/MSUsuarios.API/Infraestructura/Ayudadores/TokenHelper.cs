@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
-[ExcludeFromCodeCoverage]
+// [ExcludeFromCodeCoverage]
     public static class TokenHelper
     {
         public static string GenerarTokenPlano(int cantidadBytes = 32)
