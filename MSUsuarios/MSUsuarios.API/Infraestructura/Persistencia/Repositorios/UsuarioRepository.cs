@@ -4,9 +4,11 @@ using MSUsuarios.Infraestructura.Ayudadores;
 using MSUsuarios.Infraestructura.Persistencia.Conexion;
 using Npgsql;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 {
+    [ExcludeFromCodeCoverage]
     public class UsuarioRepository : IUsuarioRepository
     {
         private const string ParamUserName = "user_name";

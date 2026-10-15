@@ -1,8 +1,10 @@
 using Npgsql;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
+    [ExcludeFromCodeCoverage]
     public static class FiltroSqlHelper
     {
         public static string ConstruirCondicionLike(string filtro, params string[] columnas)

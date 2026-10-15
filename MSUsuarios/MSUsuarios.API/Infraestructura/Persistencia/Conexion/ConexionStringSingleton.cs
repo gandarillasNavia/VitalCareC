@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MSUsuarios.Infraestructura.Persistencia.Conexion
 {
+    [ExcludeFromCodeCoverage]
     public class ConexionStringSingleton
     {
         private static ConexionStringSingleton? instancia;

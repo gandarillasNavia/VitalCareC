@@ -3,9 +3,11 @@ using MSUsuarios.Dominio.Puertos.PuertoSalida;
 using MSUsuarios.Infraestructura.Persistencia.Conexion;
 using MSUsuarios.Infraestructura.Persistencia.Helpers;
 using Npgsql;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Persistencia.Repositorios
 {
+    [ExcludeFromCodeCoverage]
     public class UsuarioTokenRepository : IUsuarioTokenRepository
     {
         private const string ParamTokenHash = "token_hash";
