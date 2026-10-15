@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MSProveedor.Dominio.Entidades;
 
 public class Proveedor

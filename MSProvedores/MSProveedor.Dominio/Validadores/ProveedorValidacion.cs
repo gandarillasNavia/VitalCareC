@@ -21,12 +21,12 @@ public static class ProveedorValidacion
         if (string.IsNullOrWhiteSpace(correo))
             return Result<bool>.Falla("El correo electrónico es un campo obligatorio.");
 
-        if (!CorreoRegex.IsMatch(correo))
-            return Result<bool>.Falla("El formato del correo electrónico es inválido.");
-
         if (correo.EndsWith("@gmail", StringComparison.OrdinalIgnoreCase) || 
             correo.EndsWith("@hotmail", StringComparison.OrdinalIgnoreCase))
             return Result<bool>.Falla("El correo está incompleto (ej. falta '.com').");
+
+        if (!CorreoRegex.IsMatch(correo))
+            return Result<bool>.Falla("El formato del correo electrónico es inválido.");
 
         if (string.IsNullOrWhiteSpace(telefono))
             return Result<bool>.Falla("El teléfono es un campo obligatorio.");
