@@ -8,6 +8,7 @@ using MSUsuarios.App.Servicios;
 using MSUsuarios.Dominio.Puertos.PuertoSalida;
 using MSUsuarios.Dominio.Validadores;
 using MSUsuarios.Infraestructura.Creadores;
+using System.Diagnostics.CodeAnalysis;
 
 Env.Load("../../.env");
 var builder = WebApplication.CreateBuilder(args);
@@ -131,3 +132,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 await app.RunAsync();
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }
