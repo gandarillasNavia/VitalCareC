@@ -1,4 +1,4 @@
-namespace MSVentas.App.DTOs
+    namespace MSVentas.App.DTOs
 {
     public class DetalleVentaDto
     {

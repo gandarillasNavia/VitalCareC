@@ -31,12 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Aplicacion\DTOs\" />
     <Folder Include="Dominio\Modelos\" />
-    <Folder Include="Infraestructura\Ayudadores\" />
-    <Folder Include="Infraestructura\Creadores\" />
     <Folder Include="Infraestructura\Mensajeria\" />
-    <Folder Include="Infraestructura\Persistencia\" />
   </ItemGroup>
 
 </Project>

@@ -757,7 +757,7 @@ namespace MSVentas.Infraestructura.Persistencia.Repositorios
             connection.Open();
 
             int filas = command.ExecuteNonQuery();
-
+                
             if (filas <= 0)
                 return Result.Fail("No se pudo registrar el fallo de reversion de stock.");
 
