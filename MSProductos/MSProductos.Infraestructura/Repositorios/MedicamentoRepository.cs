@@ -2,7 +2,6 @@ using MSProductos.Aplicacion.Helpers;
 using MSProductos.Dominio.Entidades;
 using MSProductos.Dominio.Interfaces;
 using MSProductos.Infraestructura.Conexion;
-using MSProductos.Infraestructura.Helpers;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace MSProductos.Infraestructura.Helpers
+namespace MSProductos.Aplicacion.Helpers
 {
     public static class DataReaderExtensions
     {
