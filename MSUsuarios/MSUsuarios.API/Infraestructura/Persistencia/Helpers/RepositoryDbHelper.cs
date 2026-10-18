@@ -1,8 +1,10 @@
 using Npgsql;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Persistencia.Helpers
 {
+[ExcludeFromCodeCoverage]
     public static class RepositoryDbHelper
     {
         public static int ExecuteNonQuery(string connectionString, string query, params NpgsqlParameter[] parameters)

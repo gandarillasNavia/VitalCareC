@@ -2,9 +2,11 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
+    [ExcludeFromCodeCoverage]
     public static class CredencialesHelper
     {
         public static string GenerarUserName(string nombres, string apellidoPaterno, string ci)

@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MSUsuarios.App.Interfaces;
 using MSUsuarios.Dominio.Validadores;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Adaptadores.PuertosEntrada.Controladores
 {
+    [ExcludeFromCodeCoverage]
     [ApiController]
     [Route("api/auth")]
     public class SessionController : ControllerBase

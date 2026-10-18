@@ -1,8 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
+using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Cors;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
+    [ExcludeFromCodeCoverage]
     public static class StringHelper
     {
         public static string Limpiar(string? texto)

@@ -1,8 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MSUsuarios.Infraestructura.Ayudadores
 {
+// [ExcludeFromCodeCoverage]
     public static class TokenHelper
     {
         public static string GenerarTokenPlano(int cantidadBytes = 32)

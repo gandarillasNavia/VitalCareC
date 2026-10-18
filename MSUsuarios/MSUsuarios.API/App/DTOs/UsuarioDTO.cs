@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MSUsuarios.App.DTOs
 {
+    //[ExcludeFromCodeCoverage]
     public class UsuarioDto
     {
         public int IdUsuario { get; set; }
